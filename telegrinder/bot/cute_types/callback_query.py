@@ -147,6 +147,7 @@ class CallbackQueryCute(BaseCute[CallbackQuery], MessageEditShortcuts, CallbackQ
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         from_chat_id: int | str | None = None,
+        message_effect_id: str | None = None,
         message_id: int | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -163,7 +164,7 @@ class CallbackQueryCute(BaseCute[CallbackQuery], MessageEditShortcuts, CallbackQ
         Use this method to copy messages of any kind. Service messages, paid media
         messages, giveaway messages, giveaway winners messages, and invoice
         messages can't be copied. A quiz poll can be copied only if the value of the
-        field correct_option_id is known to the bot. The method is analogous to
+        field correct_option_ids is known to the bot. The method is analogous to
         the method forwardMessage, but the copied message doesn't have a link to
         the original message. Returns the MessageId of the sent message on success."""
         return await MessageCute.copy(self, **get_params(locals()))  # type: ignore
@@ -212,29 +213,33 @@ class CallbackQueryCute(BaseCute[CallbackQuery], MessageEditShortcuts, CallbackQ
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
         reply_markup: InlineKeyboardMarkup | None = None,
+        rich_message: InputRichMessage | None = None,
         **other: typing.Any,
     ) -> Result[Sum[MessageCute, bool], APIError]:
         """Shortcut `API.edit_message_text()`, see the [documentation](https://core.telegram.org/bots/api#editmessagetext)
 
-        Use this method to edit text and game messages. On success, if the edited
+        Use this method to edit text, rich and game messages. On success, if the edited
         message is not an inline message, the edited Message is returned, otherwise
         True is returned. Note that business messages that were not sent by the bot
         and do not contain an inline keyboard can only be edited within 48 hours from
         the time they were sent.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
 
-        :param text: New text of the message, 1-4096 characters after entities parsing.
+        :param text: New text of the message, 1-4096 characters after entity parsing; requiredif rich_message isn't specified.
 
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
 
         :param entities: A JSON-serialized list of special entities that appear in message text,which can be specified instead of parse_mode.
 
         :param link_preview_options: Link preview generation options for the message.
+
+        :param rich_message: New rich content of the message; required if text isn't specified. Directupload of new files and explicit upload of files by a URL isn't supportedwhen an inline message is edited.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard."""
         ...
