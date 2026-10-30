@@ -141,6 +141,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -162,11 +163,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         voice messages, use the sendVoice method instead.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an audio file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Audio caption, 0-1024 characters after entities parsing.
@@ -212,6 +215,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         height: int | None = None,
         message_effect_id: str | None = None,
@@ -233,11 +237,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         animation files of up to 50 MB in size, this limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an animation from the Internet, or upload a new animation using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent animation in seconds.
@@ -253,7 +259,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the animation needs to be covered with a spoiler animation.
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
@@ -286,6 +292,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_content_type_detection: bool | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -304,11 +311,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get afile from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
@@ -349,6 +358,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -365,11 +375,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send photos. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get aphoto from the Internet, or upload a new photo using multipart/form-data.The photo must be at most 10 MB in size. The photo's width and height must notexceed 10000 in total. Width and height ratio must be at most 20. More informationon Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Photo caption (may also be used when resending photos by file_id), 0-1024characters after entities parsing.
@@ -378,7 +390,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the photo needs to be covered with a spoiler animation.
 
@@ -410,6 +422,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         emoji: str | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         protect_content: bool | None = None,
@@ -424,11 +437,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBMsticker using multipart/form-data. More information on Sending Files:https://core.telegram.org/bots/api#sending-files. Video and animatedstickers can't be sent via an HTTP URL.
 
@@ -466,6 +481,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         disable_notification: bool | None = None,
         duration: int | None = None,
         emoji: str | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         height: int | None = None,
         message_effect_id: str | None = None,
@@ -489,11 +505,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get avideo from the Internet, or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent video in seconds.
@@ -512,7 +530,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the video needs to be covered with a spoiler animation.
 
@@ -546,6 +564,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         length: int | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -558,16 +577,17 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_video_note()`, see the [documentation](https://core.telegram.org/bots/api#sendvideonote)
 
-        As of v.4.0, Telegram clients support rounded square MPEG4 videos of up
-        to 1 minute long. Use this method to send video messages. On success, the
-        sent Message is returned.
+        Use this method to send a rounded square MPEG4 video of up to 1 minute long.
+        On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that existson the Telegram servers (recommended) or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.Sending video notes by a URL is currently unsupported.
 
@@ -606,6 +626,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -625,11 +646,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Voice message caption, 0-1024 characters after entities parsing.
@@ -663,18 +686,29 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         question: str,
         *,
         options: list[InputPollOption],
+        allow_adding_options: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         allows_multiple_answers: bool | None = None,
+        allows_revoting: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
         close_date: datetime | int | None = None,
         correct_option_id: int | None = None,
+        correct_option_ids: list[int] | None = None,
+        country_codes: list[str] | None = None,
+        description: str | None = None,
+        description_entities: list[MessageEntity] | None = None,
+        description_parse_mode: str | None = None,
         disable_notification: bool | None = None,
         explanation: str | None = None,
         explanation_entities: list[MessageEntity] | None = None,
+        explanation_media: InputPollMedia | None = None,
         explanation_parse_mode: str | None = None,
+        hide_results_until_closes: bool | None = None,
         is_anonymous: bool | None = None,
         is_closed: bool | None = None,
+        media: InputPollMedia | None = None,
+        members_only: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         open_period: int | None = None,
@@ -684,6 +718,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        shuffle_options: bool | None = None,
         type: typing.Literal["quiz", "regular"] | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -692,9 +727,9 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send a native poll. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername). Polls can't be sent to channel directmessages chats.
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username. Polls can't be sent to channel directmessages chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param question: Poll question, 1-300 characters.
 
@@ -702,15 +737,27 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
 
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question.It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-12 answer options.
+        :param options: A JSON-serialized list of 1-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
         :param type: Poll type, `quiz` or `regular`, defaults to `regular`.
 
-        :param allows_multiple_answers: True, if the poll allows multiple answers, ignored for polls in quiz mode,defaults to False.
+        :param allows_multiple_answers: Pass True if the poll allows multiple answers, defaults to False.
 
-        :param correct_option_id: 0-based identifier of the correct answer option, required for polls inquiz mode.
+        :param allows_revoting: Pass True if the poll allows to change chosen answer options, defaults toFalse for quizzes and to True for regular polls.
+
+        :param shuffle_options: Pass True if the poll options must be shown in random order.
+
+        :param allow_adding_options: Pass True if answer options can be added to the poll after creation; not supportedfor anonymous polls and quizzes.
+
+        :param hide_results_until_closes: Pass True if poll results must be shown only after the poll closes.
+
+        :param members_only: Pass True if voting is limited to users who have been members of the chat wherethe poll is being sent for more than 24 hours; for channel chats only.
+
+        :param country_codes: A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2 country codesindicating the countries from which users can vote in the poll; for channelchats only. Use `FT` as a country code to allow users with anonymous numbersto vote. If omitted or empty, then users from any country can participatein the poll.
+
+        :param correct_option_ids: A JSON-serialized list of monotonically increasing 0-based identifiersof the correct answer options, required for polls in quiz mode.
 
         :param explanation: Text that is shown when a user chooses an incorrect answer or taps on the lampicon in a quiz-style poll, 0-200 characters with at most 2 line feeds afterentities parsing.
 
@@ -718,11 +765,20 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
 
         :param explanation_entities: A JSON-serialized list of special entities that appear in the poll explanation.It can be specified instead of explanation_parse_mode.
 
-        :param open_period: Amount of time in seconds the poll will be active after creation, 5-600.Can't be used together with close_date.
+        :param explanation_media: Media added to the quiz explanation.
 
-        :param close_date: Point in time (Unix timestamp) when the poll will be automatically closed.Must be at least 5 and no more than 600 seconds in the future. Can't be usedtogether with open_period.
+        :param open_period: Amount of time in seconds the poll will be active after creation, 5-2628000.Can't be used together with close_date.
+
+        :param close_date: Point in time (Unix timestamp) when the poll will be automatically closed.Must be at least 5 and no more than 2628000 seconds in the future. Can't beused together with open_period.
 
         :param is_closed: Pass True if the poll needs to be immediately closed. This can be useful forpoll preview.
+
+        :param description: Description of the poll to be sent, 0-1024 characters after entities parsing.
+        :param description_parse_mode: Mode for parsing entities in the poll description. See formatting optionsfor more details.
+
+        :param description_entities: A JSON-serialized list of special entities that appear in the poll description,which can be specified instead of description_parse_mode.
+
+        :param media: Media added to the poll description.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent message from forwarding and saving.
@@ -753,6 +809,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
         google_place_id: str | None = None,
@@ -771,11 +828,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param latitude: Latitude of the venue.
 
@@ -834,9 +893,9 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
@@ -879,9 +938,9 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send a game. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel directmessages chats and channel chats.
+        :param chat_id: Unique identifier for the target chat or username of the target bot in theformat @username. Games can't be sent to channel direct messages chatsand channel chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param game_short_name: Short name of the game, serves as the unique identifier for the game. Setup your games via @BotFather.
 
@@ -967,9 +1026,9 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         bot will take a noticeable amount of time to arrive.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the actionwill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target supergroup(in the format @supergroupusername). Channel chats and channel directmessages chats aren't supported.
+        :param chat_id: Unique identifier for the target chat or username of the target bot or supergroupin the format @username. Channel chats and channel direct messages chatsaren't supported.
 
-        :param message_thread_id: Unique identifier for the target message thread; for supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread or topic of a forum; forsupergroups and private chats of bots with forum topic mode enabled only.
         :param action: Type of action to broadcast. Choose one, depending on what the user is aboutto receive: typing for text messages, upload_photo for photos, record_videoor upload_video for videos, record_voice or upload_voice for voice notes,upload_document for general files, choose_sticker for stickers, find_locationfor location data, record_video_note or upload_video_note for videonotes."""
         ...
 
@@ -995,19 +1054,19 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
     ) -> Result[list[MessageCute], APIError]:
         """Shortcut `API.send_media_group()`, see the [documentation](https://core.telegram.org/bots/api#sendmediagroup)
 
-        Use this method to send a group of photos, videos, documents or audios as
-        an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Message objects that were sent is
-        returned.
+        Use this method to send a group of photos, live photos, videos, documents
+        or audios as an album. Documents and audio files can be only grouped in an
+        album with messages of the same type. On success, an Array of Message objects
+        that were sent is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent;required if the messages are sent to a direct messages chat.
 
-        :param media: A JSON-serialized array describing messages to be sent, must include 2-10items.
+        :param media: A JSON-serialized Array describing messages to be sent, must include 2-10items.
 
         :param disable_notification: Sends messages silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent messages from forwarding and saving.
@@ -1035,6 +1094,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         heading: int | None = None,
         horizontal_accuracy: float | None = None,
         live_period: int | None = None,
@@ -1052,18 +1112,20 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send point on the map. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param latitude: Latitude of the location.
 
         :param longitude: Longitude of the location.
 
         :param horizontal_accuracy: The radius of uncertainty for the location, measured in meters; 0-1500.
-        :param live_period: Period in seconds during which the location will be updated (see Live Locations,should be between 60 and 86400, or 0x7FFFFFFF for live locations that canbe edited indefinitely.
+        :param live_period: Period in seconds during which the location will be updated (see Live Locations),must be between 60 and 86400, or 0x7FFFFFFF for live locations that can beedited indefinitely. Must be 0 for ephemeral messages.
 
         :param heading: For live locations, a direction in which the user is moving, in degrees.Must be between 1 and 360 if specified.
 
@@ -1096,6 +1158,7 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         last_name: str | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -1111,11 +1174,13 @@ class MessageAnswerShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send phone contacts. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param phone_number: Contact's phone number.
 
@@ -1157,6 +1222,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -1178,11 +1244,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         voice messages, use the sendVoice method instead.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an audio file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Audio caption, 0-1024 characters after entities parsing.
@@ -1228,6 +1296,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         height: int | None = None,
         message_effect_id: str | None = None,
@@ -1249,11 +1318,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         animation files of up to 50 MB in size, this limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an animation from the Internet, or upload a new animation using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent animation in seconds.
@@ -1269,7 +1340,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the animation needs to be covered with a spoiler animation.
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
@@ -1302,6 +1373,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_content_type_detection: bool | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -1320,11 +1392,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get afile from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
@@ -1365,6 +1439,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -1381,11 +1456,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send photos. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get aphoto from the Internet, or upload a new photo using multipart/form-data.The photo must be at most 10 MB in size. The photo's width and height must notexceed 10000 in total. Width and height ratio must be at most 20. More informationon Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Photo caption (may also be used when resending photos by file_id), 0-1024characters after entities parsing.
@@ -1394,7 +1471,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the photo needs to be covered with a spoiler animation.
 
@@ -1426,6 +1503,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         emoji: str | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         protect_content: bool | None = None,
@@ -1440,11 +1518,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBMsticker using multipart/form-data. More information on Sending Files:https://core.telegram.org/bots/api#sending-files. Video and animatedstickers can't be sent via an HTTP URL.
 
@@ -1482,6 +1562,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         disable_notification: bool | None = None,
         duration: int | None = None,
         emoji: str | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         has_spoiler: bool | None = None,
         height: int | None = None,
         message_effect_id: str | None = None,
@@ -1505,11 +1586,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get avideo from the Internet, or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent video in seconds.
@@ -1528,7 +1611,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the video needs to be covered with a spoiler animation.
 
@@ -1562,6 +1645,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         length: int | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -1574,16 +1658,17 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_video_note()`, see the [documentation](https://core.telegram.org/bots/api#sendvideonote)
 
-        As of v.4.0, Telegram clients support rounded square MPEG4 videos of up
-        to 1 minute long. Use this method to send video messages. On success, the
-        sent Message is returned.
+        Use this method to send a rounded square MPEG4 video of up to 1 minute long.
+        On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that existson the Telegram servers (recommended) or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.Sending video notes by a URL is currently unsupported.
 
@@ -1622,6 +1707,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -1641,11 +1727,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         limit may be changed in the future.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Voice message caption, 0-1024 characters after entities parsing.
@@ -1679,18 +1767,29 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         question: str,
         *,
         options: list[InputPollOption],
+        allow_adding_options: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         allows_multiple_answers: bool | None = None,
+        allows_revoting: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
         close_date: datetime | int | None = None,
         correct_option_id: int | None = None,
+        correct_option_ids: list[int] | None = None,
+        country_codes: list[str] | None = None,
+        description: str | None = None,
+        description_entities: list[MessageEntity] | None = None,
+        description_parse_mode: str | None = None,
         disable_notification: bool | None = None,
         explanation: str | None = None,
         explanation_entities: list[MessageEntity] | None = None,
+        explanation_media: InputPollMedia | None = None,
         explanation_parse_mode: str | None = None,
+        hide_results_until_closes: bool | None = None,
         is_anonymous: bool | None = None,
         is_closed: bool | None = None,
+        media: InputPollMedia | None = None,
+        members_only: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
         open_period: int | None = None,
@@ -1700,6 +1799,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        shuffle_options: bool | None = None,
         type: typing.Literal["quiz", "regular"] | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -1708,9 +1808,9 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send a native poll. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername). Polls can't be sent to channel directmessages chats.
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username. Polls can't be sent to channel directmessages chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param question: Poll question, 1-300 characters.
 
@@ -1718,15 +1818,27 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
 
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question.It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-12 answer options.
+        :param options: A JSON-serialized list of 1-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
         :param type: Poll type, `quiz` or `regular`, defaults to `regular`.
 
-        :param allows_multiple_answers: True, if the poll allows multiple answers, ignored for polls in quiz mode,defaults to False.
+        :param allows_multiple_answers: Pass True if the poll allows multiple answers, defaults to False.
 
-        :param correct_option_id: 0-based identifier of the correct answer option, required for polls inquiz mode.
+        :param allows_revoting: Pass True if the poll allows to change chosen answer options, defaults toFalse for quizzes and to True for regular polls.
+
+        :param shuffle_options: Pass True if the poll options must be shown in random order.
+
+        :param allow_adding_options: Pass True if answer options can be added to the poll after creation; not supportedfor anonymous polls and quizzes.
+
+        :param hide_results_until_closes: Pass True if poll results must be shown only after the poll closes.
+
+        :param members_only: Pass True if voting is limited to users who have been members of the chat wherethe poll is being sent for more than 24 hours; for channel chats only.
+
+        :param country_codes: A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2 country codesindicating the countries from which users can vote in the poll; for channelchats only. Use `FT` as a country code to allow users with anonymous numbersto vote. If omitted or empty, then users from any country can participatein the poll.
+
+        :param correct_option_ids: A JSON-serialized list of monotonically increasing 0-based identifiersof the correct answer options, required for polls in quiz mode.
 
         :param explanation: Text that is shown when a user chooses an incorrect answer or taps on the lampicon in a quiz-style poll, 0-200 characters with at most 2 line feeds afterentities parsing.
 
@@ -1734,11 +1846,20 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
 
         :param explanation_entities: A JSON-serialized list of special entities that appear in the poll explanation.It can be specified instead of explanation_parse_mode.
 
-        :param open_period: Amount of time in seconds the poll will be active after creation, 5-600.Can't be used together with close_date.
+        :param explanation_media: Media added to the quiz explanation.
 
-        :param close_date: Point in time (Unix timestamp) when the poll will be automatically closed.Must be at least 5 and no more than 600 seconds in the future. Can't be usedtogether with open_period.
+        :param open_period: Amount of time in seconds the poll will be active after creation, 5-2628000.Can't be used together with close_date.
+
+        :param close_date: Point in time (Unix timestamp) when the poll will be automatically closed.Must be at least 5 and no more than 2628000 seconds in the future. Can't beused together with open_period.
 
         :param is_closed: Pass True if the poll needs to be immediately closed. This can be useful forpoll preview.
+
+        :param description: Description of the poll to be sent, 0-1024 characters after entities parsing.
+        :param description_parse_mode: Mode for parsing entities in the poll description. See formatting optionsfor more details.
+
+        :param description_entities: A JSON-serialized list of special entities that appear in the poll description,which can be specified instead of description_parse_mode.
+
+        :param media: Media added to the poll description.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent message from forwarding and saving.
@@ -1769,6 +1890,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
         google_place_id: str | None = None,
@@ -1787,11 +1909,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param latitude: Latitude of the venue.
 
@@ -1850,9 +1974,9 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
@@ -1895,9 +2019,9 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send a game. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel directmessages chats and channel chats.
+        :param chat_id: Unique identifier for the target chat or username of the target bot in theformat @username. Games can't be sent to channel direct messages chatsand channel chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param game_short_name: Short name of the game, serves as the unique identifier for the game. Setup your games via @BotFather.
 
@@ -1985,19 +2109,19 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
     ) -> Result[list[MessageCute], APIError]:
         """Shortcut `API.send_media_group()`, see the [documentation](https://core.telegram.org/bots/api#sendmediagroup)
 
-        Use this method to send a group of photos, videos, documents or audios as
-        an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Message objects that were sent is
-        returned.
+        Use this method to send a group of photos, live photos, videos, documents
+        or audios as an album. Documents and audio files can be only grouped in an
+        album with messages of the same type. On success, an Array of Message objects
+        that were sent is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent;required if the messages are sent to a direct messages chat.
 
-        :param media: A JSON-serialized array describing messages to be sent, must include 2-10items.
+        :param media: A JSON-serialized Array describing messages to be sent, must include 2-10items.
 
         :param disable_notification: Sends messages silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent messages from forwarding and saving.
@@ -2025,6 +2149,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         heading: int | None = None,
         horizontal_accuracy: float | None = None,
         live_period: int | None = None,
@@ -2042,18 +2167,20 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send point on the map. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param latitude: Latitude of the location.
 
         :param longitude: Longitude of the location.
 
         :param horizontal_accuracy: The radius of uncertainty for the location, measured in meters; 0-1500.
-        :param live_period: Period in seconds during which the location will be updated (see Live Locations,should be between 60 and 86400, or 0x7FFFFFFF for live locations that canbe edited indefinitely.
+        :param live_period: Period in seconds during which the location will be updated (see Live Locations),must be between 60 and 86400, or 0x7FFFFFFF for live locations that can beedited indefinitely. Must be 0 for ephemeral messages.
 
         :param heading: For live locations, a direction in which the user is moving, in degrees.Must be between 1 and 360 if specified.
 
@@ -2086,6 +2213,7 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         chat_id: int | str | None = None,
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         last_name: str | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -2101,11 +2229,13 @@ class MessageReplyShortcuts(BaseShortcuts["MessageCute"]):
         Use this method to send phone contacts. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param phone_number: Contact's phone number.
 
@@ -2160,7 +2290,8 @@ class MessageEditShortcuts(BaseShortcuts["MessageCute | CallbackQueryCute"]):
         inline message, the edited Message is returned, otherwise True is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
@@ -2208,7 +2339,8 @@ class MessageEditShortcuts(BaseShortcuts["MessageCute | CallbackQueryCute"]):
         the time they were sent.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
@@ -2218,7 +2350,7 @@ class MessageEditShortcuts(BaseShortcuts["MessageCute | CallbackQueryCute"]):
 
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption,which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media. Supportedonly for animation, photo and video messages.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media. Supportedonly for animation, photo and video messages.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard."""
         ...
@@ -2285,23 +2417,25 @@ class MessageEditShortcuts(BaseShortcuts["MessageCute | CallbackQueryCute"]):
     ) -> Result[Sum[MessageCute, bool], APIError]:
         """Shortcut `API.edit_message_media()`, see the [documentation](https://core.telegram.org/bots/api#editmessagemedia)
 
-        Use this method to edit animation, audio, document, photo, or video messages,
-        or to add media to text messages. If a message is part of a message album, then
-        it can be edited only to an audio for audio albums, only to a document for document
-        albums and to a photo or a video otherwise. When an inline message is edited,
-        a new file can't be uploaded; use a previously uploaded file via its file_id
-        or specify a URL. On success, if the edited message is not an inline message,
-        the edited Message is returned, otherwise True is returned. Note that business
-        messages that were not sent by the bot and do not contain an inline keyboard
-        can only be edited within 48 hours from the time they were sent.
+        Use this method to edit animation, audio, document, live photo, photo,
+        or video messages, or to replace a text or a rich message with a media. If a
+        message is part of a message album, then it can be edited only to an audio for
+        audio albums, only to a document for document albums and to a photo, a live
+        photo, or a video otherwise. When an inline message is edited, a new file
+        can't be uploaded; use a previously uploaded file via its file_id or specify
+        a URL. On success, if the edited message is not an inline message, the edited
+        Message is returned, otherwise True is returned. Note that business messages
+        that were not sent by the bot and do not contain an inline keyboard can only
+        be edited within 48 hours from the time they were sent.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
 
-        :param media: A JSON-serialized object for a new media content of the message.
+        :param media: A JSON-serialized object for the new media content of the message.
 
         :param reply_markup: A JSON-serialized object for a new inline keyboard."""
         params = get_params(locals())
@@ -2342,7 +2476,8 @@ class MessageEditShortcuts(BaseShortcuts["MessageCute | CallbackQueryCute"]):
         48 hours from the time they were sent.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
@@ -2432,6 +2567,7 @@ class MessageCute(
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         entities: list[MessageEntity] | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         link_preview_options: LinkPreviewOptions | None = None,
         message_effect_id: str | None = None,
         message_thread_id: str | None = None,
@@ -2447,11 +2583,13 @@ class MessageCute(
         Use this method to send text messages. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing.
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
@@ -2488,6 +2626,7 @@ class MessageCute(
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         entities: list[MessageEntity] | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         link_preview_options: LinkPreviewOptions | None = None,
         message_effect_id: str | None = None,
         message_id: int | None = None,
@@ -2504,11 +2643,13 @@ class MessageCute(
         Use this method to send text messages. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral messageto send.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing.
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
@@ -2580,29 +2721,33 @@ class MessageCute(
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
         reply_markup: InlineKeyboardMarkup | None = None,
+        rich_message: InputRichMessage | None = None,
         **other: typing.Any,
     ) -> Result[Sum[MessageCute, bool], APIError]:
         """Shortcut `API.edit_message_text()`, see the [documentation](https://core.telegram.org/bots/api#editmessagetext)
 
-        Use this method to edit text and game messages. On success, if the edited
+        Use this method to edit text, rich and game messages. On success, if the edited
         message is not an inline message, the edited Message is returned, otherwise
         True is returned. Note that business messages that were not sent by the bot
         and do not contain an inline keyboard can only be edited within 48 hours from
         the time they were sent.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messageto be edited was sent.
 
-        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target channel (in the format @channelusername).
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier forthe target chat or username of the target bot, supergroup or channel in theformat @username.
+
         :param message_id: Required if inline_message_id is not specified. Identifier of the messageto edit.
 
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of theinline message.
 
-        :param text: New text of the message, 1-4096 characters after entities parsing.
+        :param text: New text of the message, 1-4096 characters after entity parsing; requiredif rich_message isn't specified.
 
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
 
         :param entities: A JSON-serialized list of special entities that appear in message text,which can be specified instead of parse_mode.
 
         :param link_preview_options: Link preview generation options for the message.
+
+        :param rich_message: New rich content of the message; required if text isn't specified. Directupload of new files and explicit upload of files by a URL isn't supportedwhen an inline message is edited.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard."""
         ...
@@ -2621,6 +2766,7 @@ class MessageCute(
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         from_chat_id: int | str | None = None,
+        message_effect_id: str | None = None,
         message_id: int | None = None,
         message_thread_id: str | None = None,
         parse_mode: str | None = None,
@@ -2637,7 +2783,7 @@ class MessageCute(
         Use this method to copy messages of any kind. Service messages, paid media
         messages, giveaway messages, giveaway winners messages, and invoice
         messages can't be copied. A quiz poll can be copied only if the value of the
-        field correct_option_id is known to the bot. The method is analogous to
+        field correct_option_ids is known to the bot. The method is analogous to
         the method forwardMessage, but the copied message doesn't have a link to
         the original message. Returns the MessageId of the sent message on success."""
         params = compose_method_params(
@@ -2697,6 +2843,7 @@ class MessageCute(
         direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         from_chat_id: int | str | None = None,
+        message_effect_id: str | None = None,
         message_id: int | None = None,
         message_thread_id: str | None = None,
         protect_content: bool | None = None,
@@ -2709,18 +2856,20 @@ class MessageCute(
         Use this method to forward messages of any kind. Service messages and messages
         with protected content can't be forwarded. On success, the sent Message
         is returned.
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroupor channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; forforum supergroups and private chats of bots with forum topic mode enabledonly.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be forwarded;required if the message is forwarded to a direct messages chat.
 
-        :param from_chat_id: Unique identifier for the chat where the original message was sent (or channelusername in the format @channelusername).
+        :param from_chat_id: Unique identifier for the chat where the original message was sent (or usernameof the target bot, supergroup or channel in the format @username).
 
         :param video_start_timestamp: New start timestamp for the forwarded video in the message.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the forwarded message from forwarding and saving.
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; onlyavailable when forwarding to private chats.
+
         :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only.
 
         :param message_id: Message identifier in the chat specified in from_chat_id."""
@@ -2758,7 +2907,7 @@ class MessageCute(
         respectively. Returns True on success.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be pinned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target channelin the format @username.
 
         :param message_id: Identifier of a message to pin.
 
@@ -2790,7 +2939,7 @@ class MessageCute(
         channels respectively. Returns True on success.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be unpinned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target channelin the format @username.
 
         :param message_id: Identifier of the message to unpin. Required if business_connection_idis specified. If not specified, the most recent pinned message (by sendingdate) will be unpinned."""
         params = compose_method_params(
