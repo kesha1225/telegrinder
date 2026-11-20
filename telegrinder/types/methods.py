@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class APIMethods:
-    """Telegram Bot API version `9.2`, released `August 15, 2025`."""
+    """Telegram Bot API version `10.4`, released `November 9, 2026`."""
 
     default_params = ProxiedDict(
         typing.TypedDict(
@@ -221,11 +221,12 @@ class APIMethods:
     async def send_message(
         self,
         *,
-        chat_id: int | str,
         text: str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         entities: list[MessageEntity] | None = None,
         link_preview_options: LinkPreviewOptions | None = default_params["link_preview_options"],
@@ -245,14 +246,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing. \
 
@@ -303,6 +309,7 @@ class APIMethods:
         video_start_timestamp: timedelta | int | None = None,
         disable_notification: bool | None = default_params["disable_notification"],
         protect_content: bool | None = default_params["protect_content"],
+        message_effect_id: str | None = None,
         suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[Message, APIError]:
@@ -312,23 +319,27 @@ class APIMethods:
         with protected content can't be forwarded. On success, the sent Message
         is returned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be forwarded; \
         required if the message is forwarded to a direct messages chat.
 
-        :param from_chat_id: Unique identifier for the chat where the original message was sent (or channel \
-        username in the format @channelusername).
+        :param from_chat_id: Unique identifier for the chat where the original message was sent (or username \
+        of the target bot, supergroup, or channel in the format @username).
 
         :param video_start_timestamp: New start timestamp for the forwarded video in the message.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
 
         :param protect_content: Protects the contents of the forwarded message from forwarding and saving. \
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; only \
+        available when forwarding to private chats.
 
         :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
         to send; for direct messages chats only.
@@ -359,20 +370,21 @@ class APIMethods:
         Use this method to forward multiple messages of any kind. If some of the specified
         messages can't be found or forwarded, they are skipped. Service messages
         and messages with protected content can't be forwarded. Album grouping
-        is kept for forwarded messages. On success, an array of MessageId of the
+        is kept for forwarded messages. On success, an Array of MessageId of the
         sent messages is returned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be forwarded; \
         required if the messages are forwarded to a direct messages chat.
 
         :param from_chat_id: Unique identifier for the chat where the original messages were sent (or \
-        channel username in the format @channelusername).
+        username of the target bot, supergroup, or channel in the format @username). \
 
         :param message_ids: A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id \
         to forward. The identifiers must be specified in a strictly increasing \
@@ -406,6 +418,7 @@ class APIMethods:
         disable_notification: bool | None = default_params["disable_notification"],
         protect_content: bool | None = default_params["protect_content"],
         allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
+        message_effect_id: str | None = None,
         suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
@@ -414,23 +427,25 @@ class APIMethods:
         """Method `copyMessage`, see the [documentation](https://core.telegram.org/bots/api#copymessage)
 
         Use this method to copy messages of any kind. Service messages, paid media
-        messages, giveaway messages, giveaway winners messages, and invoice
-        messages can't be copied. A quiz poll can be copied only if the value of the
-        field correct_option_id is known to the bot. The method is analogous to
-        the method forwardMessage, but the copied message doesn't have a link to
-        the original message. Returns the MessageId of the sent message on success.
+        messages, giveaway messages, giveaway winners messages, invoice messages,
+        and widget messages can't be copied. A quiz poll can be copied only if the
+        value of the field correct_option_ids is known to the bot. The method is
+        analogous to the method forwardMessage, but the copied message doesn't
+        have a link to the original message. Returns the MessageId of the sent message
+        on success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
 
-        :param from_chat_id: Unique identifier for the chat where the original message was sent (or channel \
-        username in the format @channelusername).
+        :param from_chat_id: Unique identifier for the chat where the original message was sent (or username \
+        of the target bot, supergroup, or channel in the format @username).
 
         :param message_id: Message identifier in the chat specified in from_chat_id.
 
@@ -445,8 +460,8 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the new caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media. Ignored \
-        if a new caption isn't specified.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media. Ignored if \
+        a new caption isn't specified.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
 
@@ -455,6 +470,9 @@ class APIMethods:
         :param allow_paid_broadcast: Pass True to allow up to 1000 messages per second, ignoring broadcasting \
         limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
         be withdrawn from the bot's balance.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; only \
+        available when copying to private chats.
 
         :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
         to send; for direct messages chats only. If the message is sent as a reply \
@@ -490,24 +508,25 @@ class APIMethods:
 
         Use this method to copy messages of any kind. If some of the specified messages
         can't be found or copied, they are skipped. Service messages, paid media
-        messages, giveaway messages, giveaway winners messages, and invoice
-        messages can't be copied. A quiz poll can be copied only if the value of the
-        field correct_option_id is known to the bot. The method is analogous to
-        the method forwardMessages, but the copied messages don't have a link to
-        the original message. Album grouping is kept for copied messages. On success,
-        an array of MessageId of the sent messages is returned.
+        messages, giveaway messages, giveaway winners messages, invoice messages,
+        and widget messages can't be copied. A quiz poll can be copied only if the
+        value of the field correct_option_ids is known to the bot. The method is
+        analogous to the method forwardMessages, but the copied messages don't
+        have a link to the original message. Album grouping is kept for copied messages.
+        On success, an Array of MessageId of the sent messages is returned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent; \
         required if the messages are sent to a direct messages chat.
 
         :param from_chat_id: Unique identifier for the chat where the original messages were sent (or \
-        channel username in the format @channelusername).
+        username of the target bot, supergroup, or channel in the format @username). \
 
         :param message_ids: A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id \
         to copy. The identifiers must be specified in a strictly increasing order. \
@@ -529,11 +548,12 @@ class APIMethods:
     async def send_photo(
         self,
         *,
-        chat_id: int | str,
         photo: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -555,14 +575,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
@@ -580,7 +605,7 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the photo needs to be covered with a spoiler animation.
 
@@ -612,14 +637,112 @@ class APIMethods:
         )
         return full_result(method_response, Message)
 
+    async def send_live_photo(
+        self,
+        *,
+        live_photo: InputFile | str,
+        photo: InputFile | str,
+        business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
+        message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        show_caption_above_media: bool | None = None,
+        has_spoiler: bool | None = None,
+        disable_notification: bool | None = default_params["disable_notification"],
+        protect_content: bool | None = default_params["protect_content"],
+        allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
+        message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
+        reply_parameters: ReplyParameters | None = None,
+        reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `sendLivePhoto`, see the [documentation](https://core.telegram.org/bots/api#sendlivephoto)
+
+        Use this method to send live photos. On success, the sent Message is returned.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
+        will be sent.
+
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
+
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
+
+        :param live_photo: Live photo video to send. The video must be no longer than 10 seconds and must \
+        not exceed 10 MB in size. Pass a file_id as String to send a video that exists \
+        on the Telegram servers (recommended) or upload a new video using multipart/form-data. \
+        More information on Sending Files: https://core.telegram.org/bots/api#sending-files. \
+        Sending live photos by a URL is currently unsupported.
+
+        :param photo: The static photo to send. Pass a file_id as String to send a photo that exists \
+        on the Telegram servers (recommended) or upload a new video using multipart/form-data. \
+        More information on Sending Files: https://core.telegram.org/bots/api#sending-files. \
+        Sending live photos by a URL is currently unsupported.
+
+        :param caption: Video caption (may also be used when resending videos by file_id), 0-1024 \
+        characters after entities parsing.
+
+        :param parse_mode: Mode for parsing entities in the video caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
+
+        :param has_spoiler: Pass True if the video needs to be covered with a spoiler animation.
+
+        :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
+
+        :param protect_content: Protects the contents of the sent message from forwarding and saving.
+
+        :param allow_paid_broadcast: Pass True to allow up to 1000 messages per second, ignoring broadcasting \
+        limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
+        be withdrawn from the bot's balance.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
+        chats only.
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
+        :param reply_parameters: Description of the message to reply to.
+
+        :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
+        keyboard, custom reply keyboard, instructions to remove a reply keyboard \
+        or to force a reply from the user.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendLivePhoto",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
     async def send_audio(
         self,
         *,
-        chat_id: int | str,
         audio: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -647,14 +770,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that exists \
         on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -714,11 +842,12 @@ class APIMethods:
     async def send_document(
         self,
         *,
-        chat_id: int | str,
         document: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         thumbnail: InputFile | str | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
@@ -742,14 +871,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
@@ -807,11 +941,12 @@ class APIMethods:
     async def send_video(
         self,
         *,
-        chat_id: int | str,
         video: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         duration: int | None = None,
         width: int | None = None,
         height: int | None = None,
@@ -843,14 +978,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
@@ -888,7 +1028,7 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the video needs to be covered with a spoiler animation.
 
@@ -925,11 +1065,12 @@ class APIMethods:
     async def send_animation(
         self,
         *,
-        chat_id: int | str,
         animation: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         duration: int | None = None,
         width: int | None = None,
         height: int | None = None,
@@ -957,14 +1098,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that exists \
         on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -994,7 +1140,7 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param has_spoiler: Pass True if the animation needs to be covered with a spoiler animation. \
 
@@ -1029,11 +1175,12 @@ class APIMethods:
     async def send_voice(
         self,
         *,
-        chat_id: int | str,
         voice: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -1059,14 +1206,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on the \
         Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -1114,11 +1266,12 @@ class APIMethods:
     async def send_video_note(
         self,
         *,
-        chat_id: int | str,
         video_note: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         duration: int | None = None,
         length: int | None = None,
         thumbnail: InputFile | str | None = None,
@@ -1133,21 +1286,25 @@ class APIMethods:
     ) -> Result[Message, APIError]:
         """Method `sendVideoNote`, see the [documentation](https://core.telegram.org/bots/api#sendvideonote)
 
-        As of v.4.0, Telegram clients support rounded square MPEG4 videos of up
-        to 1 minute long. Use this method to send video messages. On success, the
-        sent Message is returned.
+        Use this method to send a rounded square MPEG4 video of up to 1 minute long.
+        On success, the sent Message is returned.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that exists \
         on the Telegram servers (recommended) or upload a new video using multipart/form-data. \
@@ -1194,6 +1351,170 @@ class APIMethods:
         )
         return full_result(method_response, Message)
 
+    async def send_widget(
+        self,
+        *,
+        chat_id: int | str,
+        html: str,
+        message_thread_id: int | None = None,
+        width: int | None = None,
+        height: int | None = None,
+        public_data: str | None = None,
+        chat_data: str | None = None,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        show_caption_above_media: bool | None = None,
+        allow_queries: bool | None = None,
+        is_shared: bool | None = None,
+        disable_notification: bool | None = default_params["disable_notification"],
+        protect_content: bool | None = default_params["protect_content"],
+        allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
+        message_effect_id: str | None = None,
+        reply_parameters: ReplyParameters | None = None,
+        reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `sendWidget`, see the [documentation](https://core.telegram.org/bots/api#sendwidget)
+
+        Use this method to send a message with an HTML widget. Currently, in the production
+        environment, widgets can be sent only to private chats, and sent widgets
+        automatically have protected content and therefore can't be forwarded.
+        On success, the sent Message is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
+
+        :param html: HTML code of the widget, 1-32768 bytes. The code must not exceed 4096 bytes \
+        when compressed by zlib with the maximum compression level.
+
+        :param width: Width of the widget in logical pixels; omit if the widget must occupy the \
+        whole width of the message bubble. The width is clamped by the app to the range \
+        from 200 to the maximum width of the message bubble.
+
+        :param height: Height of the widget in logical pixels; omit if the height of the widget isn't \
+        fixed. The height is clamped by the app to the range 50-600.
+
+        :param public_data: Public data of the widget, 0-1024 bytes, which will be available wherever \
+        the widget is shown. If the widget is shared, then all messages with it will \
+        have the same public data.
+
+        :param chat_data: Data of the widget, which is specific to the message, 0-1024 bytes.
+
+        :param caption: Widget caption, 0-1024 characters after entities parsing.
+
+        :param parse_mode: Mode for parsing entities in the widget caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param show_caption_above_media: Pass True if the caption must be shown above the widget.
+
+        :param allow_queries: Pass True to allow the widget to send queries to the bot.
+
+        :param is_shared: Pass True to create a shared widget, which can be sent again using the method \
+        sendSharedWidget.
+
+        :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
+
+        :param protect_content: Protects the contents of the sent message from forwarding and saving.
+
+        :param allow_paid_broadcast: Pass True to allow up to 1000 messages per second, ignoring broadcasting \
+        limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
+        be withdrawn from the bot's balance.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
+        chats only.
+
+        :param reply_parameters: Description of the message to reply to.
+
+        :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
+        keyboard, custom reply keyboard, instructions to remove a reply keyboard \
+        or to force a reply from the user.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendWidget",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
+    async def send_shared_widget(
+        self,
+        *,
+        chat_id: int | str,
+        widget_id: str,
+        message_thread_id: int | None = None,
+        chat_data: str | None = None,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        show_caption_above_media: bool | None = None,
+        disable_notification: bool | None = default_params["disable_notification"],
+        protect_content: bool | None = default_params["protect_content"],
+        allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
+        message_effect_id: str | None = None,
+        reply_parameters: ReplyParameters | None = None,
+        reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `sendSharedWidget`, see the [documentation](https://core.telegram.org/bots/api#sendsharedwidget)
+
+        Use this method to send again a shared widget created by the bot. Currently,
+        in the production environment, widgets can be sent only to private chats,
+        and sent widgets automatically have protected content and therefore can't
+        be forwarded. On success, the sent Message is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
+
+        :param widget_id: Unique identifier of the shared widget.
+
+        :param chat_data: Data of the widget, which is specific to the message, 0-1024 bytes.
+
+        :param caption: Widget caption, 0-1024 characters after entities parsing.
+
+        :param parse_mode: Mode for parsing entities in the widget caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param show_caption_above_media: Pass True if the caption must be shown above the widget.
+
+        :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
+
+        :param protect_content: Protects the contents of the sent message from forwarding and saving.
+
+        :param allow_paid_broadcast: Pass True to allow up to 1000 messages per second, ignoring broadcasting \
+        limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
+        be withdrawn from the bot's balance.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
+        chats only.
+
+        :param reply_parameters: Description of the message to reply to.
+
+        :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
+        keyboard, custom reply keyboard, instructions to remove a reply keyboard \
+        or to force a reply from the user.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendSharedWidget",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
     async def send_paid_media(
         self,
         *,
@@ -1223,21 +1544,22 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername). If the chat is a channel, all Telegram \
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username. If the chat is a channel, all Telegram \
         Star proceeds from this media will be credited to the chat's balance. Otherwise, \
         they will be credited to the bot's balance.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
 
         :param star_count: The number of Telegram Stars that must be paid to buy access to the media; \
-        1-10000.
+        1-25000.
 
-        :param media: A JSON-serialized array describing the media to be sent; up to 10 items. \
+        :param media: A JSON-serialized Array describing the media to be sent; up to 10 items. \
 
         :param payload: Bot-defined paid media payload, 0-128 bytes. This will not be displayed \
         to the user, use it for your internal processes.
@@ -1250,7 +1572,7 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media.
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
 
@@ -1281,7 +1603,7 @@ class APIMethods:
         self,
         *,
         chat_id: int | str,
-        media: list[InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo],
+        media: list[InputMediaAudio | InputMediaDocument | InputMediaLivePhoto | InputMediaPhoto | InputMediaVideo],
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
@@ -1294,24 +1616,25 @@ class APIMethods:
     ) -> Result[list[Message], APIError]:
         """Method `sendMediaGroup`, see the [documentation](https://core.telegram.org/bots/api#sendmediagroup)
 
-        Use this method to send a group of photos, videos, documents or audios as
-        an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Message objects that were sent is
-        returned.
+        Use this method to send a group of photos, live photos, videos, documents
+        or audios as an album. Documents and audio files can be only grouped in an
+        album with messages of the same type. On success, an Array of Message objects
+        that were sent is returned.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent; \
         required if the messages are sent to a direct messages chat.
 
-        :param media: A JSON-serialized array describing messages to be sent, must include 2-10 \
+        :param media: A JSON-serialized Array describing messages to be sent, must include 2-10 \
         items.
 
         :param disable_notification: Sends messages silently. Users will receive a notification with no sound. \
@@ -1337,12 +1660,13 @@ class APIMethods:
     async def send_location(
         self,
         *,
-        chat_id: int | str,
         latitude: float,
         longitude: float,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         horizontal_accuracy: float | None = None,
         live_period: int | None = None,
         heading: int | None = None,
@@ -1363,14 +1687,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param latitude: Latitude of the location.
 
@@ -1378,9 +1707,9 @@ class APIMethods:
 
         :param horizontal_accuracy: The radius of uncertainty for the location, measured in meters; 0-1500. \
 
-        :param live_period: Period in seconds during which the location will be updated (see Live Locations, \
-        should be between 60 and 86400, or 0x7FFFFFFF for live locations that can \
-        be edited indefinitely.
+        :param live_period: Period in seconds during which the location will be updated (see Live Locations), \
+        must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be \
+        edited indefinitely. Must be 0 for ephemeral messages.
 
         :param heading: For live locations, a direction in which the user is moving, in degrees. \
         Must be between 1 and 360 if specified.
@@ -1419,14 +1748,15 @@ class APIMethods:
     async def send_venue(
         self,
         *,
-        chat_id: int | str,
         latitude: float,
         longitude: float,
         title: str,
         address: str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
         google_place_id: str | None = None,
@@ -1448,14 +1778,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param latitude: Latitude of the venue.
 
@@ -1505,12 +1840,13 @@ class APIMethods:
     async def send_contact(
         self,
         *,
-        chat_id: int | str,
         phone_number: str,
         first_name: str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         last_name: str | None = None,
         vcard: str | None = None,
         disable_notification: bool | None = default_params["disable_notification"],
@@ -1529,14 +1865,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param phone_number: Contact's phone number.
 
@@ -1587,13 +1928,24 @@ class APIMethods:
         is_anonymous: bool | None = None,
         type: typing.Literal["quiz", "regular"] | None = None,
         allows_multiple_answers: bool | None = None,
-        correct_option_id: int | None = None,
+        allows_revoting: bool | None = None,
+        shuffle_options: bool | None = None,
+        allow_adding_options: bool | None = None,
+        hide_results_until_closes: bool | None = None,
+        members_only: bool | None = None,
+        country_codes: list[str] | None = None,
+        correct_option_ids: list[int] | None = None,
         explanation: str | None = None,
         explanation_parse_mode: str | None = None,
         explanation_entities: list[MessageEntity] | None = None,
+        explanation_media: InputPollMedia | None = None,
         open_period: int | None = None,
         close_date: datetime | int | None = None,
         is_closed: bool | None = None,
+        description: str | None = None,
+        description_parse_mode: str | None = None,
+        description_entities: list[MessageEntity] | None = None,
+        media: InputPollMedia | None = None,
         disable_notification: bool | None = default_params["disable_notification"],
         protect_content: bool | None = default_params["protect_content"],
         allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
@@ -1609,12 +1961,13 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername). Polls can't be sent to channel direct \
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username. Polls can't be sent to channel direct \
         messages chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param question: Poll question, 1-300 characters.
 
@@ -1624,17 +1977,35 @@ class APIMethods:
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question. \
         It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-12 answer options.
+        :param options: A JSON-serialized list of 1-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
         :param type: Poll type, `quiz` or `regular`, defaults to `regular`.
 
-        :param allows_multiple_answers: True, if the poll allows multiple answers, ignored for polls in quiz mode, \
-        defaults to False.
+        :param allows_multiple_answers: Pass True if the poll allows multiple answers, defaults to False.
 
-        :param correct_option_id: 0-based identifier of the correct answer option, required for polls in \
-        quiz mode.
+        :param allows_revoting: Pass True if the poll allows to change chosen answer options, defaults to \
+        False for quizzes and to True for regular polls.
+
+        :param shuffle_options: Pass True if the poll options must be shown in random order.
+
+        :param allow_adding_options: Pass True if answer options can be added to the poll after creation; not supported \
+        for anonymous polls and quizzes.
+
+        :param hide_results_until_closes: Pass True if poll results must be shown only after the poll closes.
+
+        :param members_only: Pass True if voting is limited to users who have been members of the chat where \
+        the poll is being sent for more than 24 hours; for channel chats only.
+
+        :param country_codes: A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2 country codes \
+        indicating the countries from which users can vote in the poll; for channel \
+        chats only. Use `FT` as a country code to allow users with anonymous numbers \
+        to vote. If omitted or empty, then users from any country can participate \
+        in the poll.
+
+        :param correct_option_ids: A JSON-serialized list of monotonically increasing 0-based identifiers \
+        of the correct answer options, required for polls in quiz mode.
 
         :param explanation: Text that is shown when a user chooses an incorrect answer or taps on the lamp \
         icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after \
@@ -1646,15 +2017,27 @@ class APIMethods:
         :param explanation_entities: A JSON-serialized list of special entities that appear in the poll explanation. \
         It can be specified instead of explanation_parse_mode.
 
-        :param open_period: Amount of time in seconds the poll will be active after creation, 5-600. \
+        :param explanation_media: Media added to the quiz explanation.
+
+        :param open_period: Amount of time in seconds the poll will be active after creation, 5-2628000. \
         Can't be used together with close_date.
 
         :param close_date: Point in time (Unix timestamp) when the poll will be automatically closed. \
-        Must be at least 5 and no more than 600 seconds in the future. Can't be used \
-        together with open_period.
+        Must be at least 5 and no more than 2628000 seconds in the future. Can't be \
+        used together with open_period.
 
         :param is_closed: Pass True if the poll needs to be immediately closed. This can be useful for \
         poll preview.
+
+        :param description: Description of the poll to be sent, 0-1024 characters after entities parsing. \
+
+        :param description_parse_mode: Mode for parsing entities in the poll description. See formatting options \
+        for more details.
+
+        :param description_entities: A JSON-serialized list of special entities that appear in the poll description, \
+        which can be specified instead of description_parse_mode.
+
+        :param media: Media added to the poll description.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
 
@@ -1684,7 +2067,7 @@ class APIMethods:
         self,
         *,
         business_connection_id: str,
-        chat_id: int,
+        chat_id: int | str,
         checklist: InputChecklist,
         disable_notification: bool | None = default_params["disable_notification"],
         protect_content: bool | None = default_params["protect_content"],
@@ -1701,7 +2084,8 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat.
+        :param chat_id: Unique identifier for the target chat or username of the target bot in the \
+        format @username.
 
         :param checklist: A JSON-serialized object for the checklist to send.
 
@@ -1747,11 +2131,12 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
@@ -1788,6 +2173,58 @@ class APIMethods:
         )
         return full_result(method_response, Message)
 
+    async def send_message_draft(
+        self,
+        *,
+        chat_id: int,
+        draft_id: int,
+        message_thread_id: int | None = None,
+        text: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        entities: list[MessageEntity] | None = None,
+        can_stop: bool | None = None,
+        keep_on_stop: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `sendMessageDraft`, see the [documentation](https://core.telegram.org/bots/api#sendmessagedraft)
+
+        Use this method to stream a partial message to a user while the message is
+        being generated. Note that the streamed draft is ephemeral and acts as a
+        temporary 30-second preview - once the output is finalized, you must call
+        sendMessage with the complete message to persist it in the user's chat.
+        Returns True on success.
+
+        :param chat_id: Unique identifier for the target private chat.
+
+        :param message_thread_id: Unique identifier for the target message thread.
+
+        :param draft_id: Unique identifier of the message draft; must be non-zero. Changes to drafts \
+        with the same identifier are animated. Otherwise, the draft is replaced \
+        without animation.
+
+        :param text: Text of the message to be sent, 0-4096 characters after entities parsing. \
+        Pass an empty text to show a `Thinking...` placeholder.
+
+        :param parse_mode: Mode for parsing entities in the message text. See formatting options for \
+        more details.
+
+        :param entities: A JSON-serialized list of special entities that appear in message text, \
+        which can be specified instead of parse_mode.
+
+        :param can_stop: Pass True to show the user a button to stop further drafts. The bot will receive \
+        an Update `stopped_message_generation` if the user presses the button. \
+
+        :param keep_on_stop: Pass True to keep the draft in the chat when the button is pressed. The draft \
+        will still disappear after a short time or if the bot sends a message. To fully \
+        preserve the partial draft, the bot should send it as a new message.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendMessageDraft",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def send_chat_action(
         self,
         *,
@@ -1808,11 +2245,12 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the action \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername). Channel chats and channel direct \
-        messages chats aren't supported.
+        :param chat_id: Unique identifier for the target chat or username of the target bot or supergroup \
+        in the format @username. Channel chats and channel direct messages chats \
+        aren't supported.
 
-        :param message_thread_id: Unique identifier for the target message thread; for supergroups only. \
+        :param message_thread_id: Unique identifier for the target message thread or topic of a forum; for \
+        supergroups and private chats of bots with forum topic mode enabled only. \
 
         :param action: Type of action to broadcast. Choose one, depending on what the user is about \
         to receive: typing for text messages, upload_photo for photos, record_video \
@@ -1844,8 +2282,8 @@ class APIMethods:
         a channel to its discussion group have the same available reactions as messages
         in the channel. Bots can't use paid reactions. Returns True on success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
         :param message_id: Identifier of the target message. If the message belongs to a media group, \
         the reaction is set to the first non-deleted message in the group instead. \
@@ -1892,6 +2330,34 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, UserProfilePhotos)
+
+    async def get_user_profile_audios(
+        self,
+        *,
+        user_id: int,
+        offset: int | None = None,
+        limit: int | None = None,
+        **other: typing.Any,
+    ) -> Result[UserProfileAudios, APIError]:
+        """Method `getUserProfileAudios`, see the [documentation](https://core.telegram.org/bots/api#getuserprofileaudios)
+
+        Use this method to get a list of profile audios for a user. Returns a UserProfileAudios
+        object.
+
+        :param user_id: Unique identifier of the target user.
+
+        :param offset: Sequential number of the first audio to be returned. By default, all audios \
+        are returned.
+
+        :param limit: Limits the number of audios to be retrieved. Values between 1-100 are accepted. \
+        Defaults to 100.
+        """
+
+        method_response = await self.api.request_raw(
+            "getUserProfileAudios",
+            get_params(locals()),
+        )
+        return full_result(method_response, UserProfileAudios)
 
     async def set_user_emoji_status(
         self,
@@ -1965,7 +2431,7 @@ class APIMethods:
         administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target group or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
 
         :param user_id: Unique identifier of the target user.
 
@@ -2003,7 +2469,7 @@ class APIMethods:
         use the parameter only_if_banned. Returns True on success.
 
         :param chat_id: Unique identifier for the target group or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
 
         :param user_id: Unique identifier of the target user.
 
@@ -2034,7 +2500,7 @@ class APIMethods:
         Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param user_id: Unique identifier of the target user.
 
@@ -2078,6 +2544,8 @@ class APIMethods:
         can_pin_messages: bool | None = None,
         can_manage_topics: bool | None = None,
         can_manage_direct_messages: bool | None = None,
+        can_manage_tags: bool | None = None,
+        can_send_welcome_messages: bool | None = None,
         **other: typing.Any,
     ) -> Result[bool, APIError]:
         """Method `promoteChatMember`, see the [documentation](https://core.telegram.org/bots/api#promotechatmember)
@@ -2088,7 +2556,7 @@ class APIMethods:
         to demote a user. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param user_id: Unique identifier of the target user.
 
@@ -2104,7 +2572,8 @@ class APIMethods:
         :param can_manage_video_chats: Pass True if the administrator can manage video chats.
 
         :param can_restrict_members: Pass True if the administrator can restrict, ban or unban chat members, \
-        or access supergroup statistics.
+        or access supergroup statistics. For backward compatibility, defaults \
+        to True for promotions of channel administrators.
 
         :param can_promote_members: Pass True if the administrator can add new administrators with a subset \
         of their own privileges or demote administrators that they have promoted, \
@@ -2135,6 +2604,12 @@ class APIMethods:
 
         :param can_manage_direct_messages: Pass True if the administrator can manage direct messages within the channel \
         and decline suggested posts; for channels only.
+
+        :param can_manage_tags: Pass True if the administrator can edit the tags of regular members; for \
+        groups and supergroups only.
+
+        :param can_send_welcome_messages: Pass True if the administrator can manage chat welcome messages or directly \
+        send them in the case of bots.
         """
 
         method_response = await self.api.request_raw(
@@ -2157,7 +2632,7 @@ class APIMethods:
         promoted by the bot. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param user_id: Unique identifier of the target user.
 
@@ -2167,6 +2642,34 @@ class APIMethods:
 
         method_response = await self.api.request_raw(
             "setChatAdministratorCustomTitle",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_chat_member_tag(
+        self,
+        *,
+        chat_id: int | str,
+        user_id: int,
+        tag: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setChatMemberTag`, see the [documentation](https://core.telegram.org/bots/api#setchatmembertag)
+
+        Use this method to set a tag for a regular member in a group or a supergroup.
+        The bot must be an administrator in the chat for this to work and must have
+        the can_manage_tags administrator right. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param user_id: Unique identifier of the target user.
+
+        :param tag: New tag for the member; 0-16 characters, emoji are not allowed.
+        """
+
+        method_response = await self.api.request_raw(
+            "setChatMemberTag",
             get_params(locals()),
         )
         return full_result(method_response, bool)
@@ -2187,7 +2690,7 @@ class APIMethods:
         rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param sender_chat_id: Unique identifier of the target sender chat.
         """
@@ -2212,7 +2715,7 @@ class APIMethods:
         the appropriate administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param sender_chat_id: Unique identifier of the target sender chat.
         """
@@ -2239,7 +2742,7 @@ class APIMethods:
         on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param permissions: A JSON-serialized object for new default chat permissions.
 
@@ -2270,7 +2773,7 @@ class APIMethods:
         Returns the new invite link as String on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2297,7 +2800,7 @@ class APIMethods:
         Returns the new invite link as ChatInviteLink object.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param name: Invite link name; 0-32 characters.
 
@@ -2335,7 +2838,7 @@ class APIMethods:
         ChatInviteLink object.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param invite_link: The invite link to edit.
 
@@ -2374,7 +2877,7 @@ class APIMethods:
         a ChatInviteLink object.
 
         :param chat_id: Unique identifier for the target channel chat or username of the target \
-        channel (in the format @channelusername).
+        channel in the format @username.
 
         :param name: Invite link name; 0-32 characters.
 
@@ -2406,7 +2909,7 @@ class APIMethods:
         edited invite link as a ChatInviteLink object.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param invite_link: The invite link to edit.
 
@@ -2434,8 +2937,8 @@ class APIMethods:
         administrator rights. Returns the revoked invite link as ChatInviteLink
         object.
 
-        :param chat_id: Unique identifier of the target chat or username of the target channel (in \
-        the format @channelusername).
+        :param chat_id: Unique identifier of the target chat or username of the target channel in \
+        the format @username.
 
         :param invite_link: The invite link to revoke.
         """
@@ -2460,7 +2963,7 @@ class APIMethods:
         right. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param user_id: Unique identifier of the target user.
         """
@@ -2485,13 +2988,64 @@ class APIMethods:
         right. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param user_id: Unique identifier of the target user.
         """
 
         method_response = await self.api.request_raw(
             "declineChatJoinRequest",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def answer_chat_join_request_query(
+        self,
+        *,
+        chat_join_request_query_id: str,
+        result: str,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `answerChatJoinRequestQuery`, see the [documentation](https://core.telegram.org/bots/api#answerchatjoinrequestquery)
+
+        Use this method to process a received chat join request query. Returns True
+        on success.
+
+        :param chat_join_request_query_id: Unique identifier of the join request query.
+
+        :param result: Result of the query. Must be either `approve` to allow the user to join the \
+        chat, `decline` to disallow the user to join the chat, or `queue` to leave \
+        the decision to other administrators.
+        """
+
+        method_response = await self.api.request_raw(
+            "answerChatJoinRequestQuery",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def send_chat_join_request_web_app(
+        self,
+        *,
+        chat_join_request_query_id: str,
+        web_app_url: str,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `sendChatJoinRequestWebApp`, see the [documentation](https://core.telegram.org/bots/api#sendchatjoinrequestwebapp)
+
+        Use this method to process a received chat join request query by showing
+        a Mini App to the user before deciding the outcome. Call answerChatJoinRequestQuery
+        to resolve the join request query based on the user interaction with the
+        Mini App. Returns True on success.
+
+        :param chat_join_request_query_id: Unique identifier of the join request query.
+
+        :param web_app_url: An HTTPS URL of a Web App to be opened with additional data as specified in \
+        Initializing Web Apps.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendChatJoinRequestWebApp",
             get_params(locals()),
         )
         return full_result(method_response, bool)
@@ -2511,7 +3065,7 @@ class APIMethods:
         on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param photo: New chat photo, uploaded using multipart/form-data.
         """
@@ -2535,7 +3089,7 @@ class APIMethods:
         have the appropriate administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2558,7 +3112,7 @@ class APIMethods:
         and must have the appropriate administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param title: New chat title, 1-128 characters.
         """
@@ -2583,7 +3137,7 @@ class APIMethods:
         the appropriate administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param description: New chat description, 0-255 characters.
         """
@@ -2615,7 +3169,7 @@ class APIMethods:
         will be pinned.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param message_id: Identifier of a message to pin.
 
@@ -2650,7 +3204,7 @@ class APIMethods:
         will be unpinned.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
 
         :param message_id: Identifier of the message to unpin. Required if business_connection_id \
         is specified. If not specified, the most recent pinned message (by sending \
@@ -2679,7 +3233,7 @@ class APIMethods:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2700,8 +3254,8 @@ class APIMethods:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername). Channel direct messages \
-        chats aren't supported; leave the corresponding channel instead.
+        or channel in the format @username. Channel direct messages chats aren't \
+        supported; leave the corresponding channel instead.
         """
 
         method_response = await self.api.request_raw(
@@ -2722,7 +3276,7 @@ class APIMethods:
         ChatFullInfo object on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2735,15 +3289,19 @@ class APIMethods:
         self,
         *,
         chat_id: int | str,
+        return_bots: bool | None = None,
         **other: typing.Any,
     ) -> Result[list[Sum[ChatMemberOwner, ChatMemberAdministrator]], APIError]:
         """Method `getChatAdministrators`, see the [documentation](https://core.telegram.org/bots/api#getchatadministrators)
 
-        Use this method to get a list of administrators in a chat, which aren't bots.
-        Returns an Array of ChatMember objects.
+        Use this method to get a list of administrators in a chat. Returns an Array
+        of ChatMember objects.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
+
+        :param return_bots: Pass True to additionally receive all bots that are administrators of the \
+        chat. By default, bots other than the current bot are omitted.
         """
 
         method_response = await self.api.request_raw(
@@ -2760,10 +3318,11 @@ class APIMethods:
     ) -> Result[int, APIError]:
         """Method `getChatMemberCount`, see the [documentation](https://core.telegram.org/bots/api#getchatmembercount)
 
-        Use this method to get the number of members in a chat. Returns Int on success.
+        Use this method to get the number of members in a chat. Returns Integer on
+        success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2796,7 +3355,7 @@ class APIMethods:
         the chat. Returns a ChatMember object on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel in the format @username.
 
         :param user_id: Unique identifier of the target user.
         """
@@ -2817,6 +3376,44 @@ class APIMethods:
             ],
         )
 
+    async def get_chat_share_theme_backdrops(self, **other: typing.Any) -> Result[ChatShareThemeBackdrops, APIError]:
+        """Method `getChatShareThemeBackdrops`, see the [documentation](https://core.telegram.org/bots/api#getchatsharethemebackdrops)
+
+        Use this method to get the list of backdrops, which can be used as the background
+        of a theme of the screen for sharing a link to a user or a chat. Requires no parameters.
+        Returns a ChatShareThemeBackdrops object.
+        """
+
+        method_response = await self.api.request_raw(
+            "getChatShareThemeBackdrops",
+            get_params(locals()),
+        )
+        return full_result(method_response, ChatShareThemeBackdrops)
+
+    async def get_user_personal_chat_messages(
+        self,
+        *,
+        user_id: int,
+        limit: int,
+        **other: typing.Any,
+    ) -> Result[list[Message], APIError]:
+        """Method `getUserPersonalChatMessages`, see the [documentation](https://core.telegram.org/bots/api#getuserpersonalchatmessages)
+
+        Use this method to get the last messages from the personal chat (i.e., the
+        chat currently added to their profile) of a given user. On success, an Array
+        of Message objects is returned.
+
+        :param user_id: Unique identifier for the target user.
+
+        :param limit: The maximum number of messages to return; 1-20.
+        """
+
+        method_response = await self.api.request_raw(
+            "getUserPersonalChatMessages",
+            get_params(locals()),
+        )
+        return full_result(method_response, list[Message])
+
     async def set_chat_sticker_set(
         self,
         *,
@@ -2833,7 +3430,7 @@ class APIMethods:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param sticker_set_name: Name of the sticker set to be set as the group sticker set.
         """
@@ -2859,7 +3456,7 @@ class APIMethods:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -2893,13 +3490,16 @@ class APIMethods:
     ) -> Result[ForumTopic, APIError]:
         """Method `createForumTopic`, see the [documentation](https://core.telegram.org/bots/api#createforumtopic)
 
-        Use this method to create a topic in a forum supergroup chat. The bot must
-        be an administrator in the chat for this to work and must have the can_manage_topics
-        administrator rights. Returns information about the created topic as
-        a ForumTopic object.
+        Use this method to create a topic in a forum supergroup chat or a private chat
+        with a user. In the case of a supergroup chat the bot must be an administrator
+        in the chat for this to work and must have the can_manage_topics administrator
+        right. In the case of a private chat, a link to the topic can be created in the
+        format https://t.me/<bot_username>/<message_thread_id>; the link
+        opens the topic only for the user. Returns information about the created
+        topic as a ForumTopic object.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param name: Topic name, 1-128 characters.
 
@@ -2928,13 +3528,14 @@ class APIMethods:
     ) -> Result[bool, APIError]:
         """Method `editForumTopic`, see the [documentation](https://core.telegram.org/bots/api#editforumtopic)
 
-        Use this method to edit name and icon of a topic in a forum supergroup chat.
-        The bot must be an administrator in the chat for this to work and must have
-        the can_manage_topics administrator rights, unless it is the creator
-        of the topic. Returns True on success.
+        Use this method to edit name and icon of a topic in a forum supergroup chat
+        or a private chat with a user. In the case of a supergroup chat the bot must
+        be an administrator in the chat for this to work and must have the can_manage_topics
+        administrator rights, unless it is the creator of the topic. Returns True
+        on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param message_thread_id: Unique identifier for the target message thread of the forum topic.
 
@@ -2967,7 +3568,7 @@ class APIMethods:
         on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param message_thread_id: Unique identifier for the target message thread of the forum topic.
         """
@@ -2993,7 +3594,7 @@ class APIMethods:
         on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param message_thread_id: Unique identifier for the target message thread of the forum topic.
         """
@@ -3014,12 +3615,12 @@ class APIMethods:
         """Method `deleteForumTopic`, see the [documentation](https://core.telegram.org/bots/api#deleteforumtopic)
 
         Use this method to delete a forum topic along with all its messages in a forum
-        supergroup chat. The bot must be an administrator in the chat for this to
-        work and must have the can_delete_messages administrator rights. Returns
-        True on success.
+        supergroup chat or a private chat with a user. In the case of a supergroup
+        chat the bot must be an administrator in the chat for this to work and must
+        have the can_delete_messages administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param message_thread_id: Unique identifier for the target message thread of the forum topic.
         """
@@ -3039,13 +3640,14 @@ class APIMethods:
     ) -> Result[bool, APIError]:
         """Method `unpinAllForumTopicMessages`, see the [documentation](https://core.telegram.org/bots/api#unpinallforumtopicmessages)
 
-        Use this method to clear the list of pinned messages in a forum topic. The
-        bot must be an administrator in the chat for this to work and must have the
-        can_pin_messages administrator right in the supergroup. Returns True
-        on success.
+        Use this method to clear the list of pinned messages in a forum topic in a forum
+        supergroup chat or a private chat with a user. In the case of a supergroup
+        chat the bot must be an administrator in the chat for this to work and must
+        have the can_pin_messages administrator right in the supergroup. Returns
+        True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param message_thread_id: Unique identifier for the target message thread of the forum topic.
         """
@@ -3070,7 +3672,7 @@ class APIMethods:
         have the can_manage_topics administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
 
         :param name: New topic name, 1-128 characters.
         """
@@ -3094,7 +3696,7 @@ class APIMethods:
         the can_manage_topics administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3117,7 +3719,7 @@ class APIMethods:
         unhidden if it was hidden. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3140,7 +3742,7 @@ class APIMethods:
         closed if it was open. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3162,7 +3764,7 @@ class APIMethods:
         the can_manage_topics administrator rights. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3185,7 +3787,7 @@ class APIMethods:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        (in the format @supergroupusername).
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3216,7 +3818,7 @@ class APIMethods:
         user, 0-200 characters.
 
         :param show_alert: If True, an alert will be shown by the client instead of a notification at \
-        the top of the chat screen. Defaults to false.
+        the top of the chat screen. Defaults to False.
 
         :param url: URL that will be opened by the user's client. If you have created a Game and \
         accepted the conditions via @BotFather, specify the URL that opens your \
@@ -3225,8 +3827,7 @@ class APIMethods:
         open your bot with a parameter.
 
         :param cache_time: The maximum amount of time in seconds that the result of the callback query \
-        may be cached client-side. Telegram apps will support caching starting \
-        in version 3.14. Defaults to 0.
+        may be cached client-side. Defaults to 0.
         """
 
         method_response = await self.api.request_raw(
@@ -3234,6 +3835,54 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, bool)
+
+    async def answer_widget_query(
+        self,
+        *,
+        widget_query_id: str,
+        data: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `answerWidgetQuery`, see the [documentation](https://core.telegram.org/bots/api#answerwidgetquery)
+
+        Use this method to send an answer to a query from a widget. The query must be
+        answered within 15 seconds. The answer is received only by the widget that
+        sent the query and doesn't change data of the widget; use editMessageWidgetData
+        or editSharedWidgetData to change it. On success, True is returned.
+
+        :param widget_query_id: Unique identifier for the query to be answered.
+
+        :param data: Data to be returned to the widget, 0-1024 bytes.
+        """
+
+        method_response = await self.api.request_raw(
+            "answerWidgetQuery",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def answer_guest_query(
+        self,
+        *,
+        guest_query_id: str,
+        result: InlineQueryResult,
+        **other: typing.Any,
+    ) -> Result[SentGuestMessage, APIError]:
+        """Method `answerGuestQuery`, see the [documentation](https://core.telegram.org/bots/api#answerguestquery)
+
+        Use this method to reply to a received guest message. On success, a SentGuestMessage
+        object is returned.
+
+        :param guest_query_id: Unique identifier for the query to be answered.
+
+        :param result: A JSON-serialized object describing the message to be sent.
+        """
+
+        method_response = await self.api.request_raw(
+            "answerGuestQuery",
+            get_params(locals()),
+        )
+        return full_result(method_response, SentGuestMessage)
 
     async def get_user_chat_boosts(
         self,
@@ -3247,8 +3896,7 @@ class APIMethods:
         Use this method to get the list of boosts added to a chat by a user. Requires
         administrator rights in the chat. Returns a UserChatBoosts object.
 
-        :param chat_id: Unique identifier for the chat or username of the channel (in the format \
-        @channelusername).
+        :param chat_id: Unique identifier for the chat or username of the channel in the format @username. \
 
         :param user_id: Unique identifier of the target user.
         """
@@ -3278,6 +3926,95 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, BusinessConnection)
+
+    async def get_managed_bot_token(
+        self,
+        *,
+        user_id: int,
+        **other: typing.Any,
+    ) -> Result[str, APIError]:
+        """Method `getManagedBotToken`, see the [documentation](https://core.telegram.org/bots/api#getmanagedbottoken)
+
+        Use this method to get the token of a managed bot. Returns the token as String
+        on success.
+
+        :param user_id: User identifier of the managed bot whose token will be returned.
+        """
+
+        method_response = await self.api.request_raw(
+            "getManagedBotToken",
+            get_params(locals()),
+        )
+        return full_result(method_response, str)
+
+    async def replace_managed_bot_token(
+        self,
+        *,
+        user_id: int,
+        **other: typing.Any,
+    ) -> Result[str, APIError]:
+        """Method `replaceManagedBotToken`, see the [documentation](https://core.telegram.org/bots/api#replacemanagedbottoken)
+
+        Use this method to revoke the current token of a managed bot and generate
+        a new one. Returns the new token as String on success.
+
+        :param user_id: User identifier of the managed bot whose token will be replaced.
+        """
+
+        method_response = await self.api.request_raw(
+            "replaceManagedBotToken",
+            get_params(locals()),
+        )
+        return full_result(method_response, str)
+
+    async def get_managed_bot_access_settings(
+        self,
+        *,
+        user_id: int,
+        **other: typing.Any,
+    ) -> Result[BotAccessSettings, APIError]:
+        """Method `getManagedBotAccessSettings`, see the [documentation](https://core.telegram.org/bots/api#getmanagedbotaccesssettings)
+
+        Use this method to get the access settings of a managed bot. Returns a BotAccessSettings
+        object on success.
+
+        :param user_id: User identifier of the managed bot whose access settings will be returned. \
+        """
+
+        method_response = await self.api.request_raw(
+            "getManagedBotAccessSettings",
+            get_params(locals()),
+        )
+        return full_result(method_response, BotAccessSettings)
+
+    async def set_managed_bot_access_settings(
+        self,
+        *,
+        user_id: int,
+        is_access_restricted: bool,
+        added_user_ids: list[int] | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setManagedBotAccessSettings`, see the [documentation](https://core.telegram.org/bots/api#setmanagedbotaccesssettings)
+
+        Use this method to change the access settings of a managed bot. Returns True
+        on success.
+
+        :param user_id: User identifier of the managed bot whose access settings will be changed. \
+
+        :param is_access_restricted: Pass True if only selected users can access the bot. The bot's owner can always \
+        access it.
+
+        :param added_user_ids: A JSON-serialized list of up to 10 identifiers of users who will have access \
+        to the bot in addition to its owner. Ignored if is_access_restricted is \
+        False.
+        """
+
+        method_response = await self.api.request_raw(
+            "setManagedBotAccessSettings",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
 
     async def set_my_commands(
         self,
@@ -3495,6 +4232,38 @@ class APIMethods:
         )
         return full_result(method_response, BotShortDescription)
 
+    async def set_my_profile_photo(
+        self,
+        *,
+        photo: InputProfilePhoto,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setMyProfilePhoto`, see the [documentation](https://core.telegram.org/bots/api#setmyprofilephoto)
+
+        Changes the profile photo of the bot. Returns True on success.
+
+        :param photo: The new profile photo to set.
+        """
+
+        method_response = await self.api.request_raw(
+            "setMyProfilePhoto",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def remove_my_profile_photo(self, **other: typing.Any) -> Result[bool, APIError]:
+        """Method `removeMyProfilePhoto`, see the [documentation](https://core.telegram.org/bots/api#removemyprofilephoto)
+
+        Removes the profile photo of the bot. Requires no parameters. Returns True
+        on success.
+        """
+
+        method_response = await self.api.request_raw(
+            "removeMyProfilePhoto",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def set_chat_menu_button(
         self,
         *,
@@ -3507,8 +4276,8 @@ class APIMethods:
         Use this method to change the bot's menu button in a private chat, or the default
         menu button. Returns True on success.
 
-        :param chat_id: Unique identifier for the target private chat. If not specified, default \
-        bot's menu button will be changed.
+        :param chat_id: Unique identifier for the target private chat. If not specified, the bot's \
+        default menu button will be changed.
 
         :param menu_button: A JSON-serialized object for the bot's new menu button. Defaults to MenuButtonDefault. \
         """
@@ -3530,8 +4299,8 @@ class APIMethods:
         Use this method to get the current value of the bot's menu button in a private
         chat, or the default menu button. Returns MenuButton on success.
 
-        :param chat_id: Unique identifier for the target private chat. If not specified, default \
-        bot's menu button will be returned.
+        :param chat_id: Unique identifier for the target private chat. If not specified, the bot's \
+        default menu button will be returned.
         """
 
         method_response = await self.api.request_raw(
@@ -3623,11 +4392,10 @@ class APIMethods:
         :param user_id: Required if chat_id is not specified. Unique identifier of the target user \
         who will receive the gift.
 
-        :param chat_id: Required if user_id is not specified. Unique identifier for the chat or \
-        username of the channel (in the format @channelusername) that will receive \
-        the gift.
+        :param chat_id: Required if user_id is not specified. Unique identifier for the chat that \
+        will receive the gift or username of the channel in the format @username. \
 
-        :param gift_id: Identifier of the gift.
+        :param gift_id: Identifier of the gift; limited gifts can't be sent to channel chats.
 
         :param pay_for_upgrade: Pass True to pay for the gift upgrade from the bot's balance, thereby making \
         the upgrade free for the receiver.
@@ -3636,12 +4404,12 @@ class APIMethods:
 
         :param text_parse_mode: Mode for parsing entities in the text. See formatting options for more details. \
         Entities other than `bold`, `italic`, `underline`, `strikethrough`, \
-        `spoiler`, and `custom_emoji` are ignored.
+        `spoiler`, `custom_emoji`, and `date_time` are ignored.
 
         :param text_entities: A JSON-serialized list of special entities that appear in the gift text. \
         It can be specified instead of text_parse_mode. Entities other than `bold`, \
-        `italic`, `underline`, `strikethrough`, `spoiler`, and `custom_emoji` \
-        are ignored.
+        `italic`, `underline`, `strikethrough`, `spoiler`, `custom_emoji`, \
+        and `date_time` are ignored.
         """
 
         method_response = await self.api.request_raw(
@@ -3680,12 +4448,12 @@ class APIMethods:
 
         :param text_parse_mode: Mode for parsing entities in the text. See formatting options for more details. \
         Entities other than `bold`, `italic`, `underline`, `strikethrough`, \
-        `spoiler`, and `custom_emoji` are ignored.
+        `spoiler`, `custom_emoji`, and `date_time` are ignored.
 
         :param text_entities: A JSON-serialized list of special entities that appear in the gift text. \
         It can be specified instead of text_parse_mode. Entities other than `bold`, \
-        `italic`, `underline`, `strikethrough`, `spoiler`, and `custom_emoji` \
-        are ignored.
+        `italic`, `underline`, `strikethrough`, `spoiler`, `custom_emoji`, \
+        and `date_time` are ignored.
         """
 
         method_response = await self.api.request_raw(
@@ -3699,6 +4467,8 @@ class APIMethods:
         *,
         user_id: int,
         custom_description: str | None = None,
+        custom_description_parse_mode: str | None = None,
+        custom_description_entities: list[MessageEntity] | None = None,
         **other: typing.Any,
     ) -> Result[bool, APIError]:
         """Method `verifyUser`, see the [documentation](https://core.telegram.org/bots/api#verifyuser)
@@ -3710,6 +4480,13 @@ class APIMethods:
 
         :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
         if the organization isn't allowed to provide a custom verification description. \
+
+        :param custom_description_parse_mode: Mode for parsing entities in the custom description. See formatting options \
+        for more details. Only `text_link` entities are supported.
+
+        :param custom_description_entities: A JSON-serialized list of special entities that appear in the custom description, \
+        which can be specified instead of custom_description_parse_mode. Only \
+        `text_link` entities are supported.
         """
 
         method_response = await self.api.request_raw(
@@ -3723,6 +4500,8 @@ class APIMethods:
         *,
         chat_id: int | str,
         custom_description: str | None = None,
+        custom_description_parse_mode: str | None = None,
+        custom_description_entities: list[MessageEntity] | None = None,
         **other: typing.Any,
     ) -> Result[bool, APIError]:
         """Method `verifyChat`, see the [documentation](https://core.telegram.org/bots/api#verifychat)
@@ -3730,12 +4509,19 @@ class APIMethods:
         Verifies a chat on behalf of the organization which is represented by the
         bot. Returns True on success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername). Channel direct messages chats can't \
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username. Channel direct messages chats can't \
         be verified.
 
         :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
         if the organization isn't allowed to provide a custom verification description. \
+
+        :param custom_description_parse_mode: Mode for parsing entities in the custom description. See formatting options \
+        for more details. Only `text_link` entities are supported.
+
+        :param custom_description_entities: A JSON-serialized list of special entities that appear in the custom description, \
+        which can be specified instead of custom_description_parse_mode. Only \
+        `text_link` entities are supported.
         """
 
         method_response = await self.api.request_raw(
@@ -3775,8 +4561,8 @@ class APIMethods:
         Removes verification from a chat that is currently verified on behalf of
         the organization represented by the bot. Returns True on success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot or channel \
+        in the format @username.
         """
 
         method_response = await self.api.request_raw(
@@ -3981,7 +4767,7 @@ class APIMethods:
 
         :param business_connection_id: Unique identifier of the business connection.
 
-        :param show_gift_button: Pass True, if a button for sending a gift to the user or by the business account \
+        :param show_gift_button: Pass True if a button for sending a gift to the user or by the business account \
         must always be shown in the input field.
 
         :param accepted_gift_types: Types of gifts accepted by the business account.
@@ -4045,8 +4831,10 @@ class APIMethods:
         exclude_unsaved: bool | None = None,
         exclude_saved: bool | None = None,
         exclude_unlimited: bool | None = None,
-        exclude_limited: bool | None = None,
+        exclude_limited_upgradable: bool | None = None,
+        exclude_limited_non_upgradable: bool | None = None,
         exclude_unique: bool | None = None,
+        exclude_from_blockchain: bool | None = None,
         sort_by_price: bool | None = None,
         offset: str | None = None,
         limit: int | None = None,
@@ -4066,9 +4854,16 @@ class APIMethods:
 
         :param exclude_unlimited: Pass True to exclude gifts that can be purchased an unlimited number of times. \
 
-        :param exclude_limited: Pass True to exclude gifts that can be purchased a limited number of times. \
+        :param exclude_limited_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can be upgraded to unique.
+
+        :param exclude_limited_non_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can't be upgraded to unique.
 
         :param exclude_unique: Pass True to exclude unique gifts.
+
+        :param exclude_from_blockchain: Pass True to exclude gifts that were assigned from the TON blockchain and \
+        can't be resold or transferred in Telegram.
 
         :param sort_by_price: Pass True to sort results by gift price instead of send date. Sorting is applied \
         before pagination.
@@ -4084,6 +4879,133 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, OwnedGifts)
+
+    async def get_user_gifts(
+        self,
+        *,
+        user_id: int,
+        exclude_unlimited: bool | None = None,
+        exclude_limited_upgradable: bool | None = None,
+        exclude_limited_non_upgradable: bool | None = None,
+        exclude_from_blockchain: bool | None = None,
+        exclude_unique: bool | None = None,
+        sort_by_price: bool | None = None,
+        offset: str | None = None,
+        limit: int | None = None,
+        **other: typing.Any,
+    ) -> Result[OwnedGifts, APIError]:
+        """Method `getUserGifts`, see the [documentation](https://core.telegram.org/bots/api#getusergifts)
+
+        Returns the gifts owned and hosted by a user. Returns OwnedGifts on success.
+
+        :param user_id: Unique identifier of the user.
+
+        :param exclude_unlimited: Pass True to exclude gifts that can be purchased an unlimited number of times. \
+
+        :param exclude_limited_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can be upgraded to unique.
+
+        :param exclude_limited_non_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can't be upgraded to unique.
+
+        :param exclude_from_blockchain: Pass True to exclude gifts that were assigned from the TON blockchain and \
+        can't be resold or transferred in Telegram.
+
+        :param exclude_unique: Pass True to exclude unique gifts.
+
+        :param sort_by_price: Pass True to sort results by gift price instead of send date. Sorting is applied \
+        before pagination.
+
+        :param offset: Offset of the first entry to return as received from the previous request; \
+        use an empty string to get the first chunk of results.
+
+        :param limit: The maximum number of gifts to be returned; 1-100. Defaults to 100.
+        """
+
+        method_response = await self.api.request_raw(
+            "getUserGifts",
+            get_params(locals()),
+        )
+        return full_result(method_response, OwnedGifts)
+
+    async def get_chat_gifts(
+        self,
+        *,
+        chat_id: int | str,
+        exclude_unsaved: bool | None = None,
+        exclude_saved: bool | None = None,
+        exclude_unlimited: bool | None = None,
+        exclude_limited_upgradable: bool | None = None,
+        exclude_limited_non_upgradable: bool | None = None,
+        exclude_from_blockchain: bool | None = None,
+        exclude_unique: bool | None = None,
+        sort_by_price: bool | None = None,
+        offset: str | None = None,
+        limit: int | None = None,
+        **other: typing.Any,
+    ) -> Result[OwnedGifts, APIError]:
+        """Method `getChatGifts`, see the [documentation](https://core.telegram.org/bots/api#getchatgifts)
+
+        Returns the gifts owned by a chat. Returns OwnedGifts on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target channel \
+        in the format @username.
+
+        :param exclude_unsaved: Pass True to exclude gifts that aren't saved to the chat's profile page. \
+        Always True, unless the bot has the can_post_messages administrator right \
+        in the channel.
+
+        :param exclude_saved: Pass True to exclude gifts that are saved to the chat's profile page. Always \
+        False, unless the bot has the can_post_messages administrator right in \
+        the channel.
+
+        :param exclude_unlimited: Pass True to exclude gifts that can be purchased an unlimited number of times. \
+
+        :param exclude_limited_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can be upgraded to unique.
+
+        :param exclude_limited_non_upgradable: Pass True to exclude gifts that can be purchased a limited number of times \
+        and can't be upgraded to unique.
+
+        :param exclude_from_blockchain: Pass True to exclude gifts that were assigned from the TON blockchain and \
+        can't be resold or transferred in Telegram.
+
+        :param exclude_unique: Pass True to exclude unique gifts.
+
+        :param sort_by_price: Pass True to sort results by gift price instead of send date. Sorting is applied \
+        before pagination.
+
+        :param offset: Offset of the first entry to return as received from the previous request; \
+        use an empty string to get the first chunk of results.
+
+        :param limit: The maximum number of gifts to be returned; 1-100. Defaults to 100.
+        """
+
+        method_response = await self.api.request_raw(
+            "getChatGifts",
+            get_params(locals()),
+        )
+        return full_result(method_response, OwnedGifts)
+
+    async def get_unique_gift(
+        self,
+        *,
+        name: str,
+        **other: typing.Any,
+    ) -> Result[UniqueGift, APIError]:
+        """Method `getUniqueGift`, see the [documentation](https://core.telegram.org/bots/api#getuniquegift)
+
+        Use this method to get information about a unique gift by its name. Returns
+        a UniqueGift object on success.
+
+        :param name: Unique name of the gift.
+        """
+
+        method_response = await self.api.request_raw(
+            "getUniqueGift",
+            get_params(locals()),
+        )
+        return full_result(method_response, UniqueGift)
 
     async def convert_gift_to_stars(
         self,
@@ -4177,6 +5099,31 @@ class APIMethods:
         )
         return full_result(method_response, bool)
 
+    async def delete_business_account_gift(
+        self,
+        *,
+        business_connection_id: str,
+        owned_gift_id: str,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteBusinessAccountGift`, see the [documentation](https://core.telegram.org/bots/api#deletebusinessaccountgift)
+
+        Deletes a regular gift owned by a managed business account without receiving
+        Telegram Stars for it. Requires the can_convert_gifts_to_stars business
+        bot right. The gift can be deleted only if it isn't limited (the field total_count
+        of the Gift is omitted) and wasn't refunded. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param owned_gift_id: Unique identifier of the regular gift that should be deleted.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteBusinessAccountGift",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def post_story(
         self,
         *,
@@ -4221,6 +5168,46 @@ class APIMethods:
 
         method_response = await self.api.request_raw(
             "postStory",
+            get_params(locals()),
+        )
+        return full_result(method_response, Story)
+
+    async def repost_story(
+        self,
+        *,
+        business_connection_id: str,
+        from_chat_id: int,
+        from_story_id: int,
+        active_period: int,
+        post_to_chat_page: bool | None = None,
+        protect_content: bool | None = default_params["protect_content"],
+        **other: typing.Any,
+    ) -> Result[Story, APIError]:
+        """Method `repostStory`, see the [documentation](https://core.telegram.org/bots/api#repoststory)
+
+        Reposts a story on behalf of a business account from another business account.
+        Both business accounts must be managed by the same bot, and the story on the
+        source account must have been posted (or reposted) by the bot. Requires
+        the can_manage_stories business bot right for both business accounts.
+        Returns Story on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param from_chat_id: Unique identifier of the chat which posted the story that should be reposted. \
+
+        :param from_story_id: Unique identifier of the story that should be reposted.
+
+        :param active_period: Period after which the story is moved to the archive, in seconds; must be \
+        one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400.
+
+        :param post_to_chat_page: Pass True to keep the story accessible after it expires.
+
+        :param protect_content: Pass True if the content of the story must be protected from forwarding and \
+        screenshotting.
+        """
+
+        method_response = await self.api.request_raw(
+            "repostStory",
             get_params(locals()),
         )
         return full_result(method_response, Story)
@@ -4290,23 +5277,107 @@ class APIMethods:
         )
         return full_result(method_response, bool)
 
+    async def answer_web_app_query(
+        self,
+        *,
+        web_app_query_id: str,
+        result: InlineQueryResult,
+        **other: typing.Any,
+    ) -> Result[SentWebAppMessage, APIError]:
+        """Method `answerWebAppQuery`, see the [documentation](https://core.telegram.org/bots/api#answerwebappquery)
+
+        Use this method to set the result of an interaction with a Web App and send
+        a corresponding message on behalf of the user to the chat from which the query
+        originated. On success, a SentWebAppMessage object is returned.
+
+        :param web_app_query_id: Unique identifier for the query to be answered.
+
+        :param result: A JSON-serialized object describing the message to be sent.
+        """
+
+        method_response = await self.api.request_raw(
+            "answerWebAppQuery",
+            get_params(locals()),
+        )
+        return full_result(method_response, SentWebAppMessage)
+
+    async def save_prepared_inline_message(
+        self,
+        *,
+        user_id: int,
+        result: InlineQueryResult,
+        allow_user_chats: bool | None = None,
+        allow_bot_chats: bool | None = None,
+        allow_group_chats: bool | None = None,
+        allow_channel_chats: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[PreparedInlineMessage, APIError]:
+        """Method `savePreparedInlineMessage`, see the [documentation](https://core.telegram.org/bots/api#savepreparedinlinemessage)
+
+        Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage
+        object.
+
+        :param user_id: Unique identifier of the target user that can use the prepared message. \
+
+        :param result: A JSON-serialized object describing the message to be sent.
+
+        :param allow_user_chats: Pass True if the message can be sent to private chats with users.
+
+        :param allow_bot_chats: Pass True if the message can be sent to private chats with bots.
+
+        :param allow_group_chats: Pass True if the message can be sent to group and supergroup chats.
+
+        :param allow_channel_chats: Pass True if the message can be sent to channel chats.
+        """
+
+        method_response = await self.api.request_raw(
+            "savePreparedInlineMessage",
+            get_params(locals()),
+        )
+        return full_result(method_response, PreparedInlineMessage)
+
+    async def save_prepared_keyboard_button(
+        self,
+        *,
+        user_id: int,
+        button: KeyboardButton,
+        **other: typing.Any,
+    ) -> Result[PreparedKeyboardButton, APIError]:
+        """Method `savePreparedKeyboardButton`, see the [documentation](https://core.telegram.org/bots/api#savepreparedkeyboardbutton)
+
+        Stores a keyboard button that can be used by a user within a Mini App. Returns
+        a PreparedKeyboardButton object.
+
+        :param user_id: Unique identifier of the target user that can use the button.
+
+        :param button: A JSON-serialized object describing the button to be saved. The button \
+        must be of the type request_users, request_chat, or request_managed_bot. \
+        """
+
+        method_response = await self.api.request_raw(
+            "savePreparedKeyboardButton",
+            get_params(locals()),
+        )
+        return full_result(method_response, PreparedKeyboardButton)
+
     async def edit_message_text(
         self,
         *,
-        text: str,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
         message_id: int | None = None,
         inline_message_id: str | None = None,
+        text: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         entities: list[MessageEntity] | None = None,
         link_preview_options: LinkPreviewOptions | None = default_params["link_preview_options"],
+        rich_message: InputRichMessage | None = None,
         reply_markup: InlineKeyboardMarkup | None = None,
         **other: typing.Any,
     ) -> Result[Sum[Message, bool], APIError]:
         """Method `editMessageText`, see the [documentation](https://core.telegram.org/bots/api#editmessagetext)
 
-        Use this method to edit text and game messages. On success, if the edited
+        Use this method to edit text, rich and game messages. On success, if the edited
         message is not an inline message, the edited Message is returned, otherwise
         True is returned. Note that business messages that were not sent by the bot
         and do not contain an inline keyboard can only be edited within 48 hours from
@@ -4316,7 +5387,8 @@ class APIMethods:
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         to edit.
@@ -4324,7 +5396,8 @@ class APIMethods:
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of the \
         inline message.
 
-        :param text: New text of the message, 1-4096 characters after entities parsing.
+        :param text: New text of the message, 1-4096 characters after entity parsing; required \
+        if rich_message isn't specified.
 
         :param parse_mode: Mode for parsing entities in the message text. See formatting options for \
         more details.
@@ -4333,6 +5406,10 @@ class APIMethods:
         which can be specified instead of parse_mode.
 
         :param link_preview_options: Link preview generation options for the message.
+
+        :param rich_message: New rich content of the message; required if text isn't specified. Direct \
+        upload of new files and explicit upload of files by a URL isn't supported \
+        when an inline message is edited.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard.
         """
@@ -4369,7 +5446,8 @@ class APIMethods:
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         to edit.
@@ -4385,7 +5463,7 @@ class APIMethods:
         :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
         which can be specified instead of parse_mode.
 
-        :param show_caption_above_media: Pass True, if the caption must be shown above the message media. Supported \
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media. Supported \
         only for animation, photo and video messages.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard.
@@ -4410,21 +5488,23 @@ class APIMethods:
     ) -> Result[Sum[Message, bool], APIError]:
         """Method `editMessageMedia`, see the [documentation](https://core.telegram.org/bots/api#editmessagemedia)
 
-        Use this method to edit animation, audio, document, photo, or video messages,
-        or to add media to text messages. If a message is part of a message album, then
-        it can be edited only to an audio for audio albums, only to a document for document
-        albums and to a photo or a video otherwise. When an inline message is edited,
-        a new file can't be uploaded; use a previously uploaded file via its file_id
-        or specify a URL. On success, if the edited message is not an inline message,
-        the edited Message is returned, otherwise True is returned. Note that business
-        messages that were not sent by the bot and do not contain an inline keyboard
-        can only be edited within 48 hours from the time they were sent.
+        Use this method to edit animation, audio, document, live photo, photo,
+        or video messages, or to replace a text or a rich message with a media. If a
+        message is part of a message album, then it can be edited only to an audio for
+        audio albums, only to a document for document albums and to a photo, a live
+        photo, or a video otherwise. When an inline message is edited, a new file
+        can't be uploaded; use a previously uploaded file via its file_id or specify
+        a URL. On success, if the edited message is not an inline message, the edited
+        Message is returned, otherwise True is returned. Note that business messages
+        that were not sent by the bot and do not contain an inline keyboard can only
+        be edited within 48 hours from the time they were sent.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         to edit.
@@ -4432,7 +5512,7 @@ class APIMethods:
         :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of the \
         inline message.
 
-        :param media: A JSON-serialized object for a new media content of the message.
+        :param media: A JSON-serialized object for the new media content of the message.
 
         :param reply_markup: A JSON-serialized object for a new inline keyboard.
         """
@@ -4470,7 +5550,8 @@ class APIMethods:
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         to edit.
@@ -4526,7 +5607,8 @@ class APIMethods:
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         with live location to stop.
@@ -4547,7 +5629,7 @@ class APIMethods:
         self,
         *,
         business_connection_id: str,
-        chat_id: int,
+        chat_id: int | str,
         message_id: int,
         checklist: InputChecklist,
         reply_markup: InlineKeyboardMarkup | None = None,
@@ -4561,7 +5643,8 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat.
+        :param chat_id: Unique identifier for the target chat or username of the target bot in the \
+        format @username.
 
         :param message_id: Unique identifier for the target message.
 
@@ -4575,6 +5658,74 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, Message)
+
+    async def edit_message_widget_data(
+        self,
+        *,
+        chat_id: int | str | None = None,
+        message_id: int | None = None,
+        inline_message_id: str | None = None,
+        public_data: str | None = None,
+        chat_data: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editMessageWidgetData`, see the [documentation](https://core.telegram.org/bots/api#editmessagewidgetdata)
+
+        Use this method to edit data of a widget in a message sent by the bot or via the
+        bot (for inline bots). Public data of a shared widget can be changed at most
+        once per second. On success, True is returned.
+
+        :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
+        the target chat or username of the target supergroup in the format @username. \
+
+        :param message_id: Required if inline_message_id is not specified. Identifier of the message \
+        with the widget.
+
+        :param inline_message_id: Required if chat_id and message_id are not specified. Identifier of the \
+        inline message.
+
+        :param public_data: New public data of the widget, 0-1024 bytes; pass an empty string to remove \
+        the public data. If omitted, then the public data isn't changed.
+
+        :param chat_data: New data of the widget, which is specific to the message, 0-1024 bytes; pass \
+        an empty string to remove the data. If omitted, then the data isn't changed. \
+        """
+
+        method_response = await self.api.request_raw(
+            "editMessageWidgetData",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def edit_shared_widget_data(
+        self,
+        *,
+        widget_id: str,
+        public_data: str,
+        cache_time: int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editSharedWidgetData`, see the [documentation](https://core.telegram.org/bots/api#editsharedwidgetdata)
+
+        Use this method to edit public data of a shared widget created by the bot.
+        A shared widget can be edited at most once per second. On success, True is
+        returned.
+
+        :param widget_id: Unique identifier of the shared widget.
+
+        :param public_data: New public data of the widget, 0-1024 bytes; pass an empty string to remove \
+        the public data.
+
+        :param cache_time: The maximum amount of time in seconds that the public data of the widget may \
+        be cached client-side; 5-3600. If omitted, then the current value is kept, \
+        which is 30 by default.
+        """
+
+        method_response = await self.api.request_raw(
+            "editSharedWidgetData",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
 
     async def edit_message_reply_markup(
         self,
@@ -4598,7 +5749,8 @@ class APIMethods:
         to be edited was sent.
 
         :param chat_id: Required if inline_message_id is not specified. Unique identifier for \
-        the target chat or username of the target channel (in the format @channelusername). \
+        the target chat or username of the target bot, supergroup, or channel in \
+        the format @username.
 
         :param message_id: Required if inline_message_id is not specified. Identifier of the message \
         to edit.
@@ -4632,8 +5784,8 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         to be edited was sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
         :param message_id: Identifier of the original message with the poll.
 
@@ -4645,6 +5797,166 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, Poll)
+
+    async def edit_ephemeral_message_text(
+        self,
+        *,
+        chat_id: int | str,
+        receiver_user_id: int,
+        ephemeral_message_id: int,
+        text: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        entities: list[MessageEntity] | None = None,
+        rich_message: InputRichMessage | None = None,
+        link_preview_options: LinkPreviewOptions | None = default_params["link_preview_options"],
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editEphemeralMessageText`, see the [documentation](https://core.telegram.org/bots/api#editephemeralmessagetext)
+
+        Use this method to edit an ephemeral text or rich message. Note that it is
+        not guaranteed that the user will receive the message edit event, especially
+        if they are offline. On success, True is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param receiver_user_id: Identifier of the user who received the message.
+
+        :param ephemeral_message_id: Identifier of the ephemeral message to edit.
+
+        :param text: New text of the message, 1-4096 characters after entity parsing; required \
+        if rich_message isn't specified.
+
+        :param parse_mode: Mode for parsing entities in the message text. See formatting options for \
+        more details.
+
+        :param entities: A JSON-serialized list of special entities that appear in message text, \
+        which can be specified instead of parse_mode.
+
+        :param rich_message: New rich content of the message; required if text isn't specified.
+
+        :param link_preview_options: Link preview generation options for the message.
+
+        :param reply_markup: A JSON-serialized object for an inline keyboard.
+        """
+
+        method_response = await self.api.request_raw(
+            "editEphemeralMessageText",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def edit_ephemeral_message_media(
+        self,
+        *,
+        chat_id: int | str,
+        receiver_user_id: int,
+        ephemeral_message_id: int,
+        media: InputMedia,
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editEphemeralMessageMedia`, see the [documentation](https://core.telegram.org/bots/api#editephemeralmessagemedia)
+
+        Use this method to edit the media of an ephemeral message. Note that it is
+        not guaranteed that the user will receive the message edit event, especially
+        if they are offline. On success, True is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param receiver_user_id: Identifier of the user who received the message.
+
+        :param ephemeral_message_id: Identifier of the ephemeral message to edit.
+
+        :param media: A JSON-serialized object for the new media content of the message.
+
+        :param reply_markup: A JSON-serialized object for an inline keyboard.
+        """
+
+        method_response = await self.api.request_raw(
+            "editEphemeralMessageMedia",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def edit_ephemeral_message_caption(
+        self,
+        *,
+        chat_id: int | str,
+        receiver_user_id: int,
+        ephemeral_message_id: int,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        show_caption_above_media: bool | None = None,
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editEphemeralMessageCaption`, see the [documentation](https://core.telegram.org/bots/api#editephemeralmessagecaption)
+
+        Use this method to edit the caption of an ephemeral message. Note that it
+        is not guaranteed that the user will receive the message edit event, especially
+        if they are offline. On success, True is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param receiver_user_id: Identifier of the user who received the message.
+
+        :param ephemeral_message_id: Identifier of the ephemeral message to edit.
+
+        :param caption: New caption of the message, 0-1024 characters after entities parsing. \
+
+        :param parse_mode: Mode for parsing entities in the message caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param show_caption_above_media: Pass True if the caption must be shown above the message media. Supported \
+        only for animation, photo and video messages.
+
+        :param reply_markup: A JSON-serialized object for an inline keyboard.
+        """
+
+        method_response = await self.api.request_raw(
+            "editEphemeralMessageCaption",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def edit_ephemeral_message_reply_markup(
+        self,
+        *,
+        chat_id: int | str,
+        receiver_user_id: int,
+        ephemeral_message_id: int,
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `editEphemeralMessageReplyMarkup`, see the [documentation](https://core.telegram.org/bots/api#editephemeralmessagereplymarkup)
+
+        Use this method to edit only the reply markup of an ephemeral message. Note
+        that it is not guaranteed that the user will receive the message edit event,
+        especially if they are offline. On success, True is returned.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param receiver_user_id: Identifier of the user who received the message.
+
+        :param ephemeral_message_id: Identifier of the ephemeral message to edit.
+
+        :param reply_markup: A JSON-serialized object for an inline keyboard.
+        """
+
+        method_response = await self.api.request_raw(
+            "editEphemeralMessageReplyMarkup",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
 
     async def approve_suggested_post(
         self,
@@ -4726,8 +6038,8 @@ class APIMethods:
         in a channel, it can delete any message in the corresponding direct messages
         chat. Returns True on success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
         :param message_id: Identifier of the message to delete.
         """
@@ -4751,8 +6063,8 @@ class APIMethods:
         the specified messages can't be found, they are skipped. Returns True on
         success.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
         :param message_ids: A JSON-serialized list of 1-100 identifiers of messages to delete. See \
         deleteMessage for limitations on which messages can be deleted.
@@ -4764,14 +6076,106 @@ class APIMethods:
         )
         return full_result(method_response, bool)
 
-    async def send_sticker(
+    async def delete_ephemeral_message(
         self,
         *,
         chat_id: int | str,
+        receiver_user_id: int,
+        ephemeral_message_id: int,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteEphemeralMessage`, see the [documentation](https://core.telegram.org/bots/api#deleteephemeralmessage)
+
+        Use this method to delete an ephemeral message. Note that it is not guaranteed
+        that the user will receive the message deletion event, especially if they
+        are offline. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param receiver_user_id: Identifier of the user who received the message.
+
+        :param ephemeral_message_id: Identifier of the ephemeral message to delete.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteEphemeralMessage",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def delete_message_reaction(
+        self,
+        *,
+        chat_id: int | str,
+        message_id: int,
+        user_id: int | None = None,
+        actor_chat_id: int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteMessageReaction`, see the [documentation](https://core.telegram.org/bots/api#deletemessagereaction)
+
+        Use this method to remove a reaction from a message in a group or a supergroup
+        chat. The bot must have the 'can_delete_messages' administrator right
+        in the chat. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param message_id: Identifier of the target message.
+
+        :param user_id: Identifier of the user whose reaction will be removed, if the reaction was \
+        added by a user.
+
+        :param actor_chat_id: Identifier of the chat whose reaction will be removed, if the reaction was \
+        added by a chat.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteMessageReaction",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def delete_all_message_reactions(
+        self,
+        *,
+        chat_id: int | str,
+        user_id: int | None = None,
+        actor_chat_id: int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteAllMessageReactions`, see the [documentation](https://core.telegram.org/bots/api#deleteallmessagereactions)
+
+        Use this method to remove up to 10000 recent reactions in a group or a supergroup
+        chat added by a given user or chat. The bot must have the 'can_delete_messages'
+        administrator right in the chat. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        in the format @username.
+
+        :param user_id: Identifier of the user whose reactions will be removed, if the reactions \
+        were added by a user.
+
+        :param actor_chat_id: Identifier of the chat whose reactions will be removed, if the reactions \
+        were added by a chat.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteAllMessageReactions",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def send_sticker(
+        self,
+        *,
         sticker: InputFile | str,
         business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
         message_thread_id: int | None = None,
         direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
         emoji: str | None = None,
         disable_notification: bool | None = default_params["disable_notification"],
         protect_content: bool | None = default_params["protect_content"],
@@ -4790,14 +6194,19 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
 
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on the \
         Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -5233,6 +6642,122 @@ class APIMethods:
         )
         return full_result(method_response, bool)
 
+    async def send_rich_message(
+        self,
+        *,
+        rich_message: InputRichMessage,
+        business_connection_id: str | None = None,
+        chat_id: int | str | None = None,
+        message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
+        ephemeral_message_parameters: EphemeralMessageParameters | None = None,
+        disable_notification: bool | None = default_params["disable_notification"],
+        protect_content: bool | None = default_params["protect_content"],
+        allow_paid_broadcast: bool | None = default_params["allow_paid_broadcast"],
+        message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
+        reply_parameters: ReplyParameters | None = None,
+        reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `sendRichMessage`, see the [documentation](https://core.telegram.org/bots/api#sendrichmessage)
+
+        Use this method to send rich messages. If the message contains a block with
+        a media element, then the bot must have the right to send the media to the chat.
+        On success, the sent Message is returned.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
+        will be sent. Bot can send rich messages on behalf of a business account only \
+        if the corresponding user can send rich messages.
+
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username; required unless the message is sent \
+        as an ephemeral reply to a callback query.
+
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
+        :param ephemeral_message_parameters: A JSON-serialized object containing the parameters of the ephemeral message \
+        to send.
+
+        :param rich_message: The message to be sent.
+
+        :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
+
+        :param protect_content: Protects the contents of the sent message from forwarding and saving.
+
+        :param allow_paid_broadcast: Pass True to allow up to 1000 messages per second, ignoring broadcasting \
+        limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
+        be withdrawn from the bot's balance.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
+        chats only.
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
+        :param reply_parameters: Description of the message to reply to.
+
+        :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
+        keyboard, custom reply keyboard, instructions to remove a reply keyboard \
+        or to force a reply from the user.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendRichMessage",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
+    async def send_rich_message_draft(
+        self,
+        *,
+        chat_id: int,
+        draft_id: int,
+        rich_message: InputRichMessage,
+        message_thread_id: int | None = None,
+        can_stop: bool | None = None,
+        keep_on_stop: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `sendRichMessageDraft`, see the [documentation](https://core.telegram.org/bots/api#sendrichmessagedraft)
+
+        Use this method to stream a partial rich message to a user while the message
+        is being generated. Note that the streamed draft is ephemeral and acts as
+        a temporary 30-second preview - once the output is finalized, you must call
+        sendRichMessage with the complete message to persist it in the user's chat.
+        Returns True on success.
+
+        :param chat_id: Unique identifier for the target private chat.
+
+        :param message_thread_id: Unique identifier for the target message thread.
+
+        :param draft_id: Unique identifier of the message draft; must be non-zero. Changes to drafts \
+        with the same identifier are animated. Otherwise, the draft is replaced \
+        without animation.
+
+        :param rich_message: The partial message to be streamed. Direct upload of new files and explicit \
+        upload of files by a URL isn't supported.
+
+        :param can_stop: Pass True to show the user a button to stop further drafts. The bot will receive \
+        an Update `stopped_message_generation` if the user presses the button. \
+
+        :param keep_on_stop: Pass True to keep the draft in the chat when the button is pressed. The draft \
+        will still disappear after a short time or if the bot sends a message. To fully \
+        preserve the partial draft, the bot should send it as a new message.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendRichMessageDraft",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def answer_inline_query(
         self,
         *,
@@ -5251,7 +6776,7 @@ class APIMethods:
 
         :param inline_query_id: Unique identifier for the answered query.
 
-        :param results: A JSON-serialized array of results for the inline query.
+        :param results: A JSON-serialized Array of results for the inline query.
 
         :param cache_time: The maximum amount of time in seconds that the result of the inline query \
         may be cached on the server. Defaults to 300.
@@ -5273,65 +6798,6 @@ class APIMethods:
             get_params(locals()),
         )
         return full_result(method_response, bool)
-
-    async def answer_web_app_query(
-        self,
-        *,
-        web_app_query_id: str,
-        result: InlineQueryResult,
-        **other: typing.Any,
-    ) -> Result[SentWebAppMessage, APIError]:
-        """Method `answerWebAppQuery`, see the [documentation](https://core.telegram.org/bots/api#answerwebappquery)
-
-        Use this method to set the result of an interaction with a Web App and send
-        a corresponding message on behalf of the user to the chat from which the query
-        originated. On success, a SentWebAppMessage object is returned.
-
-        :param web_app_query_id: Unique identifier for the query to be answered.
-
-        :param result: A JSON-serialized object describing the message to be sent.
-        """
-
-        method_response = await self.api.request_raw(
-            "answerWebAppQuery",
-            get_params(locals()),
-        )
-        return full_result(method_response, SentWebAppMessage)
-
-    async def save_prepared_inline_message(
-        self,
-        *,
-        user_id: int,
-        result: InlineQueryResult,
-        allow_user_chats: bool | None = None,
-        allow_bot_chats: bool | None = None,
-        allow_group_chats: bool | None = None,
-        allow_channel_chats: bool | None = None,
-        **other: typing.Any,
-    ) -> Result[PreparedInlineMessage, APIError]:
-        """Method `savePreparedInlineMessage`, see the [documentation](https://core.telegram.org/bots/api#savepreparedinlinemessage)
-
-        Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage
-        object.
-
-        :param user_id: Unique identifier of the target user that can use the prepared message. \
-
-        :param result: A JSON-serialized object describing the message to be sent.
-
-        :param allow_user_chats: Pass True if the message can be sent to private chats with users.
-
-        :param allow_bot_chats: Pass True if the message can be sent to private chats with bots.
-
-        :param allow_group_chats: Pass True if the message can be sent to group and supergroup chats.
-
-        :param allow_channel_chats: Pass True if the message can be sent to channel chats.
-        """
-
-        method_response = await self.api.request_raw(
-            "savePreparedInlineMessage",
-            get_params(locals()),
-        )
-        return full_result(method_response, PreparedInlineMessage)
 
     async def send_invoice(
         self,
@@ -5373,11 +6839,12 @@ class APIMethods:
 
         Use this method to send invoices. On success, the sent Message is returned.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target bot, supergroup, \
+        or channel in the format @username.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
         required if the message is sent to a direct messages chat.
@@ -5406,7 +6873,7 @@ class APIMethods:
         the majority of currencies). Defaults to 0. Not supported for payments \
         in Telegram Stars.
 
-        :param suggested_tip_amounts: A JSON-serialized array of suggested amounts of tips in the smallest units \
+        :param suggested_tip_amounts: A JSON-serialized Array of suggested amounts of tips in the smallest units \
         of the currency (integer, not float/double). At most 4 suggested tip amounts \
         can be specified. The suggested tip amounts must be positive, passed in \
         a strictly increased order and must not exceed max_tip_amount.
@@ -5545,7 +7012,7 @@ class APIMethods:
         the majority of currencies). Defaults to 0. Not supported for payments \
         in Telegram Stars.
 
-        :param suggested_tip_amounts: A JSON-serialized array of suggested amounts of tips in the smallest units \
+        :param suggested_tip_amounts: A JSON-serialized Array of suggested amounts of tips in the smallest units \
         of the currency (integer, not float/double). At most 4 suggested tip amounts \
         can be specified. The suggested tip amounts must be positive, passed in \
         a strictly increased order and must not exceed max_tip_amount.
@@ -5613,7 +7080,7 @@ class APIMethods:
         are any problems (for example, if delivery to the specified address is not \
         possible).
 
-        :param shipping_options: Required if ok is True. A JSON-serialized array of available shipping options. \
+        :param shipping_options: Required if ok is True. A JSON-serialized Array of available shipping options. \
 
         :param error_message: Required if ok is False. Error message in human readable form that explains \
         why it is impossible to complete the order (e.g. `Sorry, delivery to your \
@@ -5769,7 +7236,7 @@ class APIMethods:
 
         :param user_id: User identifier.
 
-        :param errors: A JSON-serialized array describing the errors.
+        :param errors: A JSON-serialized Array describing the errors.
         """
 
         method_response = await self.api.request_raw(
@@ -5781,7 +7248,7 @@ class APIMethods:
     async def send_game(
         self,
         *,
-        chat_id: int,
+        chat_id: int | str,
         game_short_name: str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
@@ -5800,11 +7267,13 @@ class APIMethods:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel direct \
-        messages chats and channel chats.
+        :param chat_id: Unique identifier for the target chat or username of the target bot in the \
+        format @username. Games can't be sent to channel direct messages chats \
+        and channel chats.
 
-        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
-        forum supergroups only.
+        :param message_thread_id: Unique identifier for the target message thread (topic) of a forum; for \
+        forum supergroups and private chats of bots with forum topic mode enabled \
+        only.
 
         :param game_short_name: Short name of the game, serves as the unique identifier for the game. Set \
         up your games via @BotFather.
